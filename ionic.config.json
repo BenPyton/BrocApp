@@ -1,0 +1,7 @@
+{
+  "name": "BrocApp",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
