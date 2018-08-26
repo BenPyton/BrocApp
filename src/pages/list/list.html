@@ -3,21 +3,35 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>List</ion-title>
+    <ion-title>
+      Nom qui est trop long pour être affichée en entier
+      <div [style.color]="'green'" [style.font-weight]="'bold'" float-right>{{totalGain}} €</div>
+    </ion-title>
   </ion-navbar>
 </ion-header>
 
+
 <ion-content>
+
   <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-      <ion-icon [name]="item.icon" item-start></ion-icon>
+    <div ion-item *ngFor="let item of items">
+      <!-- <ion-icon [name]="item.icon" item-start></ion-icon> -->
       {{item.title}}
-      <div class="item-note" item-end>
-        {{item.note}}
-      </div>
-    </button>
+      <div float-right margin-right>{{item.price}} €</div>
+      <button ion-button icon-only clear color="dark" item-end (click)="editItem($event, item)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </div>
   </ion-list>
+
   <div *ngIf="selectedItem" padding>
     You navigated here from <b>{{selectedItem.title}}</b>
   </div>
+
+
 </ion-content>
+
+<ion-footer>
+
+  <button ion-button full (click)="editItem($event, null)">Nouvelle vente</button>
+</ion-footer>
