@@ -4,8 +4,8 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      Nom qui est trop long pour être affichée en entier
-      <div [style.color]="'green'" [style.font-weight]="'bold'" float-right>{{totalGain}} €</div>
+      {{account.getName()}}
+      <div [style.color]="'green'" [style.font-weight]="'bold'" float-right>{{account.getTotal().toFixed(2)}} €</div>
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -14,24 +14,26 @@
 <ion-content>
 
   <ion-list>
-    <div ion-item *ngFor="let item of items">
+    <div ion-item *ngFor="let item of account.getArray()">
       <!-- <ion-icon [name]="item.icon" item-start></ion-icon> -->
-      {{item.title}}
-      <div float-right margin-right>{{item.price}} €</div>
+      {{item.getName()}}
+      <div float-right item-end margin-right>{{item.getPrice().toFixed(2)}} €</div>
       <button ion-button icon-only clear color="dark" item-end (click)="editItem($event, item)">
-        <ion-icon name="more"></ion-icon>
+        <ion-icon class="buttonPadding" name="more"></ion-icon>
       </button>
     </div>
   </ion-list>
 
-  <div *ngIf="selectedItem" padding>
+  <!-- <div *ngIf="selectedItem" padding>
     You navigated here from <b>{{selectedItem.title}}</b>
-  </div>
+  </div> -->
+
+  <!-- <button ion-button full (click)="testJSON()">Test</button> -->
 
 
 </ion-content>
 
 <ion-footer>
 
-  <button ion-button full (click)="editItem($event, null)">Nouvelle vente</button>
+  <button ion-button full (click)="editItem($event, null)">{{'LIST.NEW_ITEM' | translate }}</button>
 </ion-footer>

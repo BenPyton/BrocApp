@@ -1,0 +1,41 @@
+{
+	"MENU": {
+		"MENU": "Menu",
+		"HOME": "Home",
+		"SETTINGS": "Settings"
+	},
+	"HOME": {
+		"NEW_ACCOUNT": "New Account"
+	},
+	"ACCOUNT": {
+		"TITLE": "Title",
+		"DESCRIPTION": "Description",
+		"DATE": "Date"
+	},
+	"LIST": {
+		"NEW_ITEM": "New Sale"
+	},
+	"ITEM": {
+		"NAME": "Name",
+		"DESCRIPTION": "Description",
+		"PRICE": "Price"
+	},
+	"SETTINGS": {
+		"LANGUAGE": "Language",
+		"CONFIRM_SAVE": "Confirm account save"
+	},
+	"BUTTON": {
+		"APPLY": "Apply",
+		"CANCEL": "Cancel",
+		"YES": "Yes",
+		"NO": "No",
+		"OK": "Ok",
+		"CLEAR": "Clear",
+		"QUIT": "Quit",
+		"SAVE": "Save"
+	},
+	"SAVE_ALERT": {
+		"TITLE": "Save ?",
+		"CONTENT": "Do you want to save ?<br>Not saved data will be lost."
+	}
+}

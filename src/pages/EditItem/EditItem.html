@@ -11,16 +11,17 @@
 
   <form [formGroup]="group">
     <ion-item>
-      <ion-label>Title</ion-label>
-      <ion-input type="text" formControlName="title"></ion-input>
+      <ion-label>{{'ITEM.NAME' | translate}}</ion-label>
+      <ion-input  #itemName type="text" formControlName="name"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Description</ion-label>
+      <ion-label>{{'ITEM.DESCRIPTION' | translate}}</ion-label>
       <ion-textarea formControlName="description"></ion-textarea>
     </ion-item>
     <ion-item>
-      <ion-label>Price</ion-label>
+      <ion-label>{{'ITEM.PRICE' | translate}}</ion-label>
       <ion-input formControlName="price" type="number"></ion-input>
+      <button ion-button clear (click)="resetPrice()" item-end>{{'BUTTON.CLEAR' | translate}}</button> 
     </ion-item>
 
     <ion-grid>
@@ -46,6 +47,6 @@
 
 <ion-footer>
 
-  <button ion-button clear (click)="dismiss(null)">Cancel</button>
-  <button ion-button clear float-right [disabled]="!group.valid" (click)="dismiss(group.value)">Apply</button>
+  <button ion-button clear (click)="dismiss(null)">{{'BUTTON.CANCEL' | translate}}</button>
+  <button ion-button clear float-right [disabled]="!group.valid" (click)="dismiss(group.value)">{{'BUTTON.APPLY' | translate}}</button>
 </ion-footer>

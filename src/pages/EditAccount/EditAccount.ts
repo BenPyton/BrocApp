@@ -2,16 +2,16 @@ import { Component, ViewChild } from '@angular/core';
 import { Keyboard } from '@ionic-native/keyboard';
 import { NavParams, ModalController, ViewController } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
-import { Item } from '../../other/ItemModel';
+import { ItemList } from '../../other/ItemList';
 
 @Component({
-  selector: 'page-editItem',
-  templateUrl: 'EditItem.html'
+  selector: 'page-editAccount',
+  templateUrl: 'EditAccount.html'
 })
-export class EditItemPage {
+export class EditAccountPage {
 
   private group: FormGroup;
-  @ViewChild('itemName') itemNameInput;
+  @ViewChild('accountName') accountNameInput;
 
   constructor(
     private keyboard: Keyboard,
@@ -23,13 +23,12 @@ export class EditItemPage {
     let data = navParams.get('data');
     if(data == null)
     {
-      data = new Item('', '', 0);
+      data = new ItemList('', '', new Date());
     }
 
     this.group = this.formBuilder.group({
       name: [data.getName(), Validators.required],
-      description: [data.getDescription()],
-      price: [data.getPrice()]
+      description: [data.getDescription()]
     });
   }
 
@@ -37,22 +36,9 @@ export class EditItemPage {
   {
     setTimeout(() => {
       this.keyboard.show();
-      this.itemNameInput.setFocus();
+      this.accountNameInput.setFocus();
     }, 500);
   }
-
-  addPrice(value: number)
-  {
-    let newValue:number = this.group.value.price + value;
-    this.group.get('price').setValue(Number.parseFloat(newValue.toFixed(2)));
-    //console.log("added price: " + value + " | total price: " + this.group.value.price);
-  }
-
-  resetPrice()
-  {
-    this.group.get('price').setValue(0);
-  }
-
 
   dismiss(data)
   {

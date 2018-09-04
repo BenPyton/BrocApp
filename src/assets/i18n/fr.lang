@@ -1,0 +1,41 @@
+{
+	"MENU": {
+		"MENU": "Menu",
+		"HOME": "Accueil",
+		"SETTINGS": "Paramètres"
+	},
+	"HOME": {
+		"NEW_ACCOUNT": "Nouveau Compte"
+	},
+	"ACCOUNT": {
+		"TITLE": "Titre",
+		"DESCRIPTION": "Description",
+		"DATE": "Date"
+	},
+	"LIST": {
+		"NEW_ITEM": "Nouvelle Vente"
+	},
+	"ITEM": {
+		"NAME": "Nom",
+		"DESCRIPTION": "Description",
+		"PRICE": "Prix"
+	},
+	"SETTINGS": {
+		"LANGUAGE": "Langue",
+		"CONFIRM_SAVE": "Confirmer la sauvegarde de compte"
+	},
+	"BUTTON": {
+		"APPLY": "Appliquer",
+		"CANCEL": "Annuler",
+		"YES": "Oui",
+		"NO": "Non",
+		"OK": "Ok",
+		"CLEAR": "Effacer",
+		"QUIT": "Quitter",
+		"SAVE": "Sauvegarder"
+	},
+	"SAVE_ALERT": {
+		"TITLE": "Sauvegarder ?",
+		"CONTENT": "Voulez-vous sauvegarder ?<br>Les données non sauvegardées seront perdues."
+	}
+}
