@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController, AlertController, ItemSliding } from 'ionic-angular';
-import { File } from '@ionic-native/file';
+import { File, DirectoryEntry } from '@ionic-native/file';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsData } from '../../other/SettingsData';
 import { EditItemPage } from '../EditItem/EditItem';
@@ -35,37 +35,147 @@ export class ListPage {
     // }
   }
 
-  // Doesn't work yet
-  saveFile()
+  strErr(err) : string
   {
-    this.file.checkDir(this.file.dataDirectory, 'mydir')
-    .then(() => {
-      // file exists
-      this.file.listDir(this.file.dataDirectory, 'mydir')
-      .then(entries => {
-        for(let i = 0; i < entries.length; i++)
-        {
-          console.log(entries[i].name);
-        }
+    return "Error: " + err.message + " | Code: " + err.code;
+  }
+
+  writeFile(directory: DirectoryEntry): Promise<{}>
+  {
+    let fileName:string = 'test';
+
+    console.log("Attempt to write file \"" + fileName + "\" ...");
+    return new Promise((resolve, reject) => {
+        this.file.checkFile(directory.nativeURL, fileName)
+      .then(() => 
+      {
+        console.log("File \"" + fileName + "\" exists.");
+
+        console.log("Path: " + directory.nativeURL);
+        console.log("File: " + fileName);
+        this.file.writeExistingFile(directory.nativeURL, fileName, 'this is an existing test.')
+        .then(() => { console.log("Writing to an existing file succeeded !"); })
+        .catch((err) => { console.log("Error while writing to an existing file: " + this.strErr(err)); });
+      })
+      .catch((err) => 
+      {
+        console.log("Error: file \"" + fileName + "\" doesn't exists. Creating it...");
+        console.log("Path: " + directory.nativeURL);
+        console.log("File: " + fileName);
+        this.file.writeFile(directory.nativeURL, fileName, 'this is a new test.')
+        .then(() => {console.log("Writing to a newly created file succeeded !")})
+        .catch((err) => { console.log("Error while writing to a newly created file: " + this.strErr(err)); });
       });
-    }).catch((err) => {
-      // file doesn't exists
-      console.log("Error: directory doesn't exists.");
-      this.file.createDir(this.file.dataDirectory, 'mydir', false)
-      .then(dir => {
-        this.file.checkFile(dir.fullPath, 'test')
-        .then(() => {
-          this.file.writeExistingFile(dir.fullPath, 'test', 'this is ae existing test.')
-          .then(() => {console.log("Writing to an existing file succeeded !")})
-          .catch(() => { console.log("Error while writing to an existing file."); });
-        }).catch(() => {
-          this.file.writeFile(dir.fullPath, 'test', 'this is a new test.')
-          .then(() => {console.log("Writing to a newly created file succeeded !")})
-          .catch(() => { console.log("Error while writing to a newly created file."); });
+    });
+  }
+
+  // try to get a dir and create it if don't exist. Return a DirectoryEntry.
+  getDirectory(path: string, dirName: string): Promise<DirectoryEntry>
+  {
+    console.log("Attempt to get directory...");
+    return new Promise((resolve, reject) => 
+    {
+      // First check if the directory exists already
+      console.log("Checking directory existence...");
+      this.file.checkDir(path, dirName)
+      .then(() => 
+      {
+        console.log("Directory \"" + dirName + "\" exists.");
+        console.log("Try to resolve directory url: " + (path + dirName));
+        this.file.resolveDirectoryUrl(path + dirName)
+        .then((dir) => {
+          console.log("Resolve successful !");
+          resolve(dir);
+        })
+        .catch(err => 
+        {
+          console.log("Error when resolving directory url: " + this.strErr(err));
+          throw new Error("Cannot resolving existing directory at: \"" + path + dirName + "\".");
+        });
+      })
+      .catch((err) => 
+      {
+        // file doesn't exists
+        console.log("Directory \"" + dirName + "\" doesn't exists. Creating it...");
+        this.file.createDir(path, dirName, false)
+        .then(dir => {
+          console.log("Directory \"" + dirName + "\" successfully created !");
+          resolve(dir);
+        })
+        .catch(() => {
+          console.log("Error while directory creation: " + this.strErr(err));
+          throw new Error("Cannot create new directory at path: \"" + path + "\".");
         });
       });
     });
   }
+
+
+  // Doesn't work yet
+  saveFile()
+  {
+    let dirName:string = 'mydir';
+    console.log("======== SAVING FILE ========");
+    this.getDirectory(this.file.dataDirectory, dirName)
+    .then((dir) =>
+    { 
+      console.log("Full path: " + dir.fullPath);
+      console.log("Native url: " + dir.nativeURL);
+      return this.writeFile(dir);
+    })
+    .then(() => 
+    {
+      console.log("=========== END ============");
+    })
+    .catch(err => 
+    {
+      console.log(err.message);
+    })
+
+    // console.log("Attempt to save file...");
+    // this.file.checkDir(this.file.dataDirectory, dirName)
+    // .then(() => 
+    // {
+    //   console.log("Directory \"" + dirName + "\" exists.");
+    //   // file exists
+    //   this.file.listDir(this.file.dataDirectory, dirName)
+    //   .then(entries => 
+    //   {
+    //     // console.log("List of current entries in directory:");
+    //     // for(let i = 0; i < entries.length; i++)
+    //     // {
+    //     //   console.log(entries[i].name);
+    //     // }
+    //     console.log("Resolve dir: " + (this.file.dataDirectory + dirName));
+    //     this.file.resolveDirectoryUrl(this.file.dataDirectory + dirName)
+    //     .then((dir) => {
+
+    //       this.writeFile(dir);
+    //     })
+    //     .catch(err => 
+    //     {
+    //       console.log("Error when resolving directory url: " + this.strErr(err));
+    //     });
+    //   })
+    //   .catch((err) => 
+    //   {
+    //     console.log("Error: cannot read entries of the directory.");
+    //   });
+    // })
+    // .catch((err) => 
+    // {
+    //   // file doesn't exists
+    //   console.log("Error: directory \"" + dirName + "\" doesn't exists. Creating it...");
+    //   this.file.createDir(this.file.dataDirectory, dirName, false)
+    //   .then(dir => {
+    //     console.log("Directory \"" + dirName + "\" successfully created !");
+
+    //     this.writeFile(dir);
+    //   });
+    // });
+  }
+
+ 
 
   // Work great but no file saving yet
   ionViewCanLeave()
@@ -78,7 +188,7 @@ export class ListPage {
         if(!this.settings.getConfirmSave())
         {
           console.log("Auto Save");
-          resolve();
+          return resolve();
         }
         // else show confirm message
 
@@ -163,15 +273,14 @@ export class ListPage {
 
   testJSON()
   {
-      let data = JSON.stringify(this.account);
-      console.log("Test ! : " + data);
+      // let data = JSON.stringify(this.account);
       // let account = ItemList.fromJSON(JSON.parse(data));
       // console.log("Data : " + data);
       // console.log("List name: " + account.getName());
       // console.log("List length: " + account.getLength());
       // console.log("Items 1: " + account.getArray()[0].toString());
       // console.log("Items 1 name: " + account.getArray()[0].getName());
-      //this.saveFile();
+      this.saveFile();
   }
 
 }
