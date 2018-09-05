@@ -1,0 +1,15 @@
+Signed the APK android for releasing in Google Play :
+
+DISCLAIMER: only me have the key password so whoever is not me can't sign the apk, this is just a remenber for me and noone else.
+
+#1 Create the release apk :
+	ionic cordova build android --release
+
+#2 Sign the APK with jarsigner :
+	jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore release-key.keystore android-release-unsigned.apk Pyton_BrocApp
+
+#3 Verify signature with jarsigner :
+	jarsigner -verify -verbose -certs android-release-unsigned.apk
+
+#4 Finally, Align apk with zipalign : 
+	"%ANDROID_HOME%"/build_tools/28.0.2/zipalign.exe -v 4 android-release-unsigned.apk [AppName]-Signed
