@@ -18,6 +18,10 @@
       <ion-label>{{'ACCOUNT.DESCRIPTION' | translate}}</ion-label>
       <ion-textarea formControlName="description"></ion-textarea>
     </ion-item>
+    <ion-item>
+      <ion-label>{{'ACCOUNT.DATE' | translate}}</ion-label>
+      <ion-datetime displayFormat="DD DDD MMM YYYY" pickerFormat="DD MMM YYYY" [min]="getCurrentYear()-5" [max]="getCurrentYear()+5" formControlName="date"></ion-datetime>
+    </ion-item>
   </form>
 
 </ion-content>

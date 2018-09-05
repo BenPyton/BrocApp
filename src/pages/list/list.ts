@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
+import { NavController, NavParams, ModalController, AlertController, ItemSliding } from 'ionic-angular';
 import { File } from '@ionic-native/file';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsData } from '../../other/SettingsData';
@@ -78,6 +78,7 @@ export class ListPage {
         if(!this.settings.getConfirmSave())
         {
           console.log("Auto Save");
+          resolve();
         }
         // else show confirm message
 
@@ -122,8 +123,9 @@ export class ListPage {
     }
   }
 
-  editItem(event, item: Item)
+  editItem(event, item: Item, sliding: ItemSliding)
   {
+    if(sliding != null) sliding.close();
     const modal = this.modalCtrl.create(EditItemPage, {data: item});
     // retrieve data from dismissed modal page
     modal.onDidDismiss(data => {
@@ -131,13 +133,15 @@ export class ListPage {
 
       if(data != null)
       {
-        if(item != null)
+        if(item != null) // modify dta from tapped item
         {
-          this.updateItem(item, data);
+          item.setName(data.name);
+          item.setDescription(data.description);
+          item.setPrice(data.price);
         }
-        else
+        else // create element in the list and store data into it
         {
-          this.createItem(data);
+          this.account.addItem(new Item(data.name, data.description, data.price));
         }
         
         this.dirty = true;
@@ -149,30 +153,25 @@ export class ListPage {
   }
 
 
-  createItem(data)
+  deleteItem(event, item: Item)
   {
-      // create element in the list and store data into it
-      this.account.addItem(new Item(data.name, data.description, data.price));
-  }
-
-  updateItem(item: Item, data)
-  {
-      // modify dta from tapped item
-      item.setName(data.name);
-      item.setDescription(data.description);
-      item.setPrice(data.price);
+    this.account.removeItem(item);
+    console.log("Delete item: " + item.getName());
+    this.dirty = true;
+    this.account.updateTotal();
   }
 
   testJSON()
   {
-      // let data = JSON.stringify(this.account);
+      let data = JSON.stringify(this.account);
+      console.log("Test ! : " + data);
       // let account = ItemList.fromJSON(JSON.parse(data));
       // console.log("Data : " + data);
       // console.log("List name: " + account.getName());
       // console.log("List length: " + account.getLength());
       // console.log("Items 1: " + account.getArray()[0].toString());
       // console.log("Items 1 name: " + account.getArray()[0].getName());
-      this.saveFile();
+      //this.saveFile();
   }
 
 }

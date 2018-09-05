@@ -28,7 +28,8 @@ export class EditAccountPage {
 
     this.group = this.formBuilder.group({
       name: [data.getName(), Validators.required],
-      description: [data.getDescription()]
+      description: [data.getDescription()],
+      date: [data.getDate().toJSON()]
     });
   }
 
@@ -43,6 +44,11 @@ export class EditAccountPage {
   dismiss(data)
   {
     this.viewCtrl.dismiss(data);
+  }
+
+  getCurrentYear()
+  {
+    return new Date().getFullYear();
   }
 }
 

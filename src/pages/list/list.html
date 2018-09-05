@@ -14,19 +14,25 @@
 <ion-content>
 
   <ion-list>
-    <div ion-item *ngFor="let item of account.getArray()">
+    <ion-item-sliding #sliding *ngFor="let item of account.getArray()">
       <!-- <ion-icon [name]="item.icon" item-start></ion-icon> -->
-      {{item.getName()}}
-      <div float-right item-end margin-right>{{item.getPrice().toFixed(2)}} €</div>
-      <button ion-button icon-only clear color="dark" item-end (click)="editItem($event, item)">
-        <ion-icon class="buttonPadding" name="more"></ion-icon>
-      </button>
-    </div>
+      <ion-item>
+        {{item.getName()}}
+        <div float-right item-end margin-right>{{item.getPrice().toFixed(2)}} €</div>
+      </ion-item>
+      <ion-item-options side="right" no-margin>
+        <button ion-button icon-only color="primary" class="slider-padding" (click)="editItem($event, item, sliding)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+      </ion-item-options>
+      <ion-item-options side="left" no-margin>
+        <button ion-button icon-only color="danger" class="slider-padding" (click)="deleteItem($event, item)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 
-  <!-- <div *ngIf="selectedItem" padding>
-    You navigated here from <b>{{selectedItem.title}}</b>
-  </div> -->
 
   <!-- <button ion-button full (click)="testJSON()">Test</button> -->
 
@@ -35,5 +41,5 @@
 
 <ion-footer>
 
-  <button ion-button full (click)="editItem($event, null)">{{'LIST.NEW_ITEM' | translate }}</button>
+  <button ion-button class="footer-button" full (click)="editItem($event, null, null)">{{'LIST.NEW_ITEM' | translate }}</button>
 </ion-footer>

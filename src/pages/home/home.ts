@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController } from 'ionic-angular';
+import { NavController, ModalController, ItemSliding } from 'ionic-angular';
 import { ItemList } from '../../other/ItemList';
 import { EditAccountPage } from '../EditAccount/EditAccount';
 import { ListPage } from '../list/list';
@@ -21,8 +21,9 @@ export class HomePage {
 		this.accounts = [];
 	}
 
-	editAccount(event, account: ItemList)
+	editAccount(event, account: ItemList, itemSliding: ItemSliding)
 	{
+		if(itemSliding != null) itemSliding.close();
 		const modal = this.modalCtrl.create(EditAccountPage, {data: account});
 	    // retrieve data from dismissed modal page
 	    modal.onDidDismiss(data => {
@@ -33,15 +34,23 @@ export class HomePage {
 	        if(account != null)
 	        {
 	          account.setName(data.name);
+	          account.setDescription(data.description);
+	          account.setDate(new Date(data.date));
 	        }
 	        else
 	        {
-			  this.accounts.push(new ItemList(data.name, "This is a test account.", new Date()));
+			  this.accounts.push(new ItemList(data.name, data.description, new Date(data.date)));
 	        }
 	      }
 	    });
 	    // show modal page
 	    modal.present();
+	}
+
+	deleteAccount(event, account: ItemList)
+	{
+		this.accounts.splice(this.accounts.indexOf(account), 1);
+		console.log("Delete account: " + account.getName());
 	}
 
 	openAccount(event, account: ItemList)

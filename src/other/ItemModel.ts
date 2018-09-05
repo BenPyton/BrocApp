@@ -5,13 +5,15 @@ interface ItemJSON
 	name: string;
 	description: string;
 	price: number;
+	date: string;
 }
 
 export class Item 
 {
+	private date:Date;
 	constructor(private name:string, private description: string, private price: number)
 	{
-
+		this.date = new Date();
 	}
 
 	getName(): string { return this.name; }
@@ -28,13 +30,16 @@ export class Item
 			{
 				name: this.name, 
 				description: this.description, 
-				price: this.price
+				price: this.price,
+				date: this.date.toJSON()
 			});
 	}
 
 	static fromJSON(json: ItemJSON): Item {
 		let item = Object.create(Item.prototype);
-		return Object.assign(item, json);
+		return Object.assign(item, json, {
+			date: new Date(json.date)
+		});
 	}
 }
 

@@ -41,9 +41,15 @@ export class ItemList
 		this.items.push(item);
 	}
 
-	removeItem(index: number)
+	removeItemAt(index: number)
 	{
 		this.items.splice(index, 1);
+	}
+
+	removeItem(item: Item)
+	{
+		let index:number = this.items.indexOf(item);
+		if(index != -1) this.items.splice(index, 1);
 	}
 
 	updateTotal()
@@ -63,7 +69,7 @@ export class ItemList
 			{
 				name: this.name, 
 				description: this.description, 
-				date: this.date.toDateString(),
+				date: this.date.toJSON(),
 				items: this.items
 			});
 	}
