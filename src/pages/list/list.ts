@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController, AlertController, ItemSliding } from 'ionic-angular';
-import { File, DirectoryEntry } from '@ionic-native/file';
+//import { File, DirectoryEntry } from '@ionic-native/file';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsData } from '../../other/SettingsData';
 import { EditItemPage } from '../EditItem/EditItem';
 import { Item } from '../../other/ItemModel';
 import { ItemList } from '../../other/ItemList';
+import { FileManager } from '../../other/FileManager';
 
 @Component({
   selector: 'page-list',
@@ -18,7 +19,8 @@ export class ListPage {
   private dirty:boolean = false;
 
   constructor(
-    private file:File,
+    //private file:File,
+    private fileMngr: FileManager,
     private alertCtrl: AlertController,
     private translate: TranslateService,
     private settings: SettingsData,
@@ -35,93 +37,111 @@ export class ListPage {
     // }
   }
 
-  strErr(err) : string
-  {
-    return "Error: " + err.message + " | Code: " + err.code;
-  }
+  // strErr(err) : string
+  // {
+  //   return "Error: " + err.message + " | Code: " + err.code;
+  // }
 
-  writeFile(directory: DirectoryEntry): Promise<{}>
-  {
-    let fileName:string = 'test';
+  // writeFile(directory: DirectoryEntry, fileName: string, content: string|Blob): Promise<{}>
+  // {
+  //   //console.log("Attempt to write file \"" + fileName + "\" ...");
+  //   return new Promise((resolve, reject) => 
+  //   {
+  //     this.file.checkFile(directory.nativeURL, fileName)
+  //     .then(() => 
+  //     {
+  //       //console.log("File \"" + fileName + "\" exists.");
 
-    console.log("Attempt to write file \"" + fileName + "\" ...");
-    return new Promise((resolve, reject) => {
-        this.file.checkFile(directory.nativeURL, fileName)
-      .then(() => 
-      {
-        console.log("File \"" + fileName + "\" exists.");
+  //       //console.log("Path: " + directory.nativeURL);
+  //       //console.log("File: " + fileName);
+  //       this.file.writeExistingFile(directory.nativeURL, fileName, content)
+  //       .then(() => 
+  //       { 
+  //         //console.log("Writing to an existing file succeeded !"); 
+  //         resolve();
+  //       })
+  //       .catch((err) => 
+  //       { 
+  //         //console.log("Error while writing to an existing file: " + this.strErr(err)); 
+  //         throw new Error("Error while writing in existing file: " + err.message);
+          
+  //       });
+  //     })
+  //     .catch((err) => 
+  //     {
+  //       //console.log("Error: file \"" + fileName + "\" doesn't exists. Creating it...");
+  //       //console.log("Path: " + directory.nativeURL);
+  //       //console.log("File: " + fileName);
+  //       this.file.writeFile(directory.nativeURL, fileName, content)
+  //       .then(() => 
+  //       {
+  //         //console.log("Writing to a newly created file succeeded !");
+  //         resolve();
+  //       })
+  //       .catch((err) => 
+  //       { 
+  //         //console.log("Error while writing to a newly created file: " + this.strErr(err)); 
+  //         throw new Error("Error while writing in new file: " + err.message);
+  //       });
+  //     });
+  //   });
+  // }
 
-        console.log("Path: " + directory.nativeURL);
-        console.log("File: " + fileName);
-        this.file.writeExistingFile(directory.nativeURL, fileName, 'this is an existing test.')
-        .then(() => { console.log("Writing to an existing file succeeded !"); })
-        .catch((err) => { console.log("Error while writing to an existing file: " + this.strErr(err)); });
-      })
-      .catch((err) => 
-      {
-        console.log("Error: file \"" + fileName + "\" doesn't exists. Creating it...");
-        console.log("Path: " + directory.nativeURL);
-        console.log("File: " + fileName);
-        this.file.writeFile(directory.nativeURL, fileName, 'this is a new test.')
-        .then(() => {console.log("Writing to a newly created file succeeded !")})
-        .catch((err) => { console.log("Error while writing to a newly created file: " + this.strErr(err)); });
-      });
-    });
-  }
-
-  // try to get a dir and create it if don't exist. Return a DirectoryEntry.
-  getDirectory(path: string, dirName: string): Promise<DirectoryEntry>
-  {
-    console.log("Attempt to get directory...");
-    return new Promise((resolve, reject) => 
-    {
-      // First check if the directory exists already
-      console.log("Checking directory existence...");
-      this.file.checkDir(path, dirName)
-      .then(() => 
-      {
-        console.log("Directory \"" + dirName + "\" exists.");
-        console.log("Try to resolve directory url: " + (path + dirName));
-        this.file.resolveDirectoryUrl(path + dirName)
-        .then((dir) => {
-          console.log("Resolve successful !");
-          resolve(dir);
-        })
-        .catch(err => 
-        {
-          console.log("Error when resolving directory url: " + this.strErr(err));
-          throw new Error("Cannot resolving existing directory at: \"" + path + dirName + "\".");
-        });
-      })
-      .catch((err) => 
-      {
-        // file doesn't exists
-        console.log("Directory \"" + dirName + "\" doesn't exists. Creating it...");
-        this.file.createDir(path, dirName, false)
-        .then(dir => {
-          console.log("Directory \"" + dirName + "\" successfully created !");
-          resolve(dir);
-        })
-        .catch(() => {
-          console.log("Error while directory creation: " + this.strErr(err));
-          throw new Error("Cannot create new directory at path: \"" + path + "\".");
-        });
-      });
-    });
-  }
+  // // try to get a dir and create it if don't exist. Return a DirectoryEntry.
+  // getDirectory(path: string, dirName: string): Promise<DirectoryEntry>
+  // {
+  //   //console.log("Attempt to get directory...");
+  //   return new Promise((resolve, reject) => 
+  //   {
+  //     // First check if the directory exists already
+  //     //console.log("Checking directory existence...");
+  //     this.file.checkDir(path, dirName)
+  //     .then(() => 
+  //     {
+  //       //console.log("Directory \"" + dirName + "\" exists.");
+  //       //console.log("Try to resolve directory url: " + (path + dirName));
+  //       this.file.resolveDirectoryUrl(path + dirName)
+  //       .then((dir) => {
+  //         //console.log("Resolve successful !");
+  //         resolve(dir);
+  //       })
+  //       .catch(err => 
+  //       {
+  //         //console.log("Error when resolving directory url: " + this.strErr(err));
+  //         throw new Error("Cannot resolving existing directory at: \"" + path + dirName + "\".");
+  //       });
+  //     })
+  //     .catch((err) => 
+  //     {
+  //       // file doesn't exist so we create and return it
+  //       //console.log("Directory \"" + dirName + "\" doesn't exists. Creating it...");
+  //       this.file.createDir(path, dirName, false)
+  //       .then(dir => {
+  //         //console.log("Directory \"" + dirName + "\" successfully created !");
+  //         resolve(dir);
+  //       })
+  //       .catch(() => {
+  //         //console.log("Error while directory creation: " + this.strErr(err));
+  //         throw new Error("Cannot create new directory at path: \"" + path + "\".");
+  //       });
+  //     });
+  //   });
+  // }
 
 
   // Doesn't work yet
   saveFile()
   {
     let dirName:string = 'mydir';
+    let fileName:string = 'test';
+    let content:string = 'This is a save test.';
     console.log("======== SAVING FILE ========");
-    this.getDirectory(this.file.dataDirectory, dirName)
+    this.fileMngr.getDirectory(this.fileMngr.getFileService().externalRootDirectory, dirName)
     .then((dir) =>
     { 
       console.log("Full path: " + dir.fullPath);
       console.log("Native url: " + dir.nativeURL);
-      return this.writeFile(dir);
+      return this.fileMngr.writeFile(dir, fileName, content);
     })
     .then(() => 
     {
@@ -129,50 +149,15 @@ export class ListPage {
     })
     .catch(err => 
     {
-      console.log(err.message);
-    })
-
-    // console.log("Attempt to save file...");
-    // this.file.checkDir(this.file.dataDirectory, dirName)
-    // .then(() => 
-    // {
-    //   console.log("Directory \"" + dirName + "\" exists.");
-    //   // file exists
-    //   this.file.listDir(this.file.dataDirectory, dirName)
-    //   .then(entries => 
-    //   {
-    //     // console.log("List of current entries in directory:");
-    //     // for(let i = 0; i < entries.length; i++)
-    //     // {
-    //     //   console.log(entries[i].name);
-    //     // }
-    //     console.log("Resolve dir: " + (this.file.dataDirectory + dirName));
-    //     this.file.resolveDirectoryUrl(this.file.dataDirectory + dirName)
-    //     .then((dir) => {
-
-    //       this.writeFile(dir);
-    //     })
-    //     .catch(err => 
-    //     {
-    //       console.log("Error when resolving directory url: " + this.strErr(err));
-    //     });
-    //   })
-    //   .catch((err) => 
-    //   {
-    //     console.log("Error: cannot read entries of the directory.");
-    //   });
-    // })
-    // .catch((err) => 
-    // {
-    //   // file doesn't exists
-    //   console.log("Error: directory \"" + dirName + "\" doesn't exists. Creating it...");
-    //   this.file.createDir(this.file.dataDirectory, dirName, false)
-    //   .then(dir => {
-    //     console.log("Directory \"" + dirName + "\" successfully created !");
-
-    //     this.writeFile(dir);
-    //   });
-    // });
+      console.log("[ERROR] " + err.message);
+      let alert = this.alertCtrl.create({
+        title: "ERROR",
+        message: err.message,
+        buttons: ['Ok']
+      });
+      // Present the alert to the user
+      alert.present();
+    });
   }
 
  

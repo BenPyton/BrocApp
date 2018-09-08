@@ -14,6 +14,7 @@ import { ListPage } from '../pages/list/list';
 import { EditItemPage } from '../pages/EditItem/EditItem';
 import { EditAccountPage } from '../pages/EditAccount/EditAccount';
 import { SettingsData } from '../other/SettingsData';
+import { FileManager } from '../other/FileManager';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -58,6 +59,7 @@ export function createTranslateLoader(http: HttpClient) {
     File,
     Keyboard,
     SettingsData,
+    FileManager,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

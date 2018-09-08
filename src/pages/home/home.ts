@@ -4,6 +4,7 @@ import { ItemList } from '../../other/ItemList';
 import { EditAccountPage } from '../EditAccount/EditAccount';
 import { ListPage } from '../list/list';
 import { TranslateService } from '@ngx-translate/core';
+import { FileManager } from '../../other/FileManager';
 
 @Component({
   selector: 'page-home',
@@ -16,6 +17,7 @@ export class HomePage {
 	constructor(
 		private modalCtrl: ModalController,
 		private translate: TranslateService,
+		private file: FileManager,
 		public navCtrl: NavController) 
 	{
 		this.accounts = [];
@@ -56,6 +58,32 @@ export class HomePage {
 	openAccount(event, account: ItemList)
 	{
 		this.navCtrl.push(ListPage, {data: account});
+	}
+
+
+	getAccountList()
+	{
+		this.file.getDirectory(this.file.getFileService().externalRootDirectory, "BrocApp")
+		.then((dir) => 
+		{
+			this.file.listFiles(dir)
+			.then((files) => 
+			{
+				for(let i = 0; i < files.length; i++)
+				{
+					console.log("File: " + files[i].name);
+				}
+			});
+		});
+	}
+
+	loadAccount(fileName: string)
+	{
+		this.file.loadFile(dir, files[i].name)
+		.then((content) => 
+		{
+			console.log("Content: " + content);
+		});
 	}
 
 }
