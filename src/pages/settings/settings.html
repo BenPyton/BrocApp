@@ -18,6 +18,13 @@
       </ion-select>
     </ion-item>
     <ion-item>
+      <ion-label>{{'SETTINGS.CURRENCY' | translate}}</ion-label>
+      <ion-select [ngModel]="settings.getCurrency()" (ionChange)="currencyChanged($event)" okText="{{'BUTTON.OK' | translate}}" cancelText="{{'BUTTON.CANCEL' | translate}}">
+        <ion-option value="$">Dollar ($)</ion-option> 
+        <ion-option value="€">Euro (€)</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
       <ion-label>{{'SETTINGS.CONFIRM_SAVE' | translate}}</ion-label>
       <ion-toggle [ngModel]="settings.getConfirmSave()" (ionChange)="confirmSaveChanged($event)"></ion-toggle>
     </ion-item>

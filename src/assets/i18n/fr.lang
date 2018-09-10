@@ -22,7 +22,8 @@
 	},
 	"SETTINGS": {
 		"LANGUAGE": "Langue",
-		"CONFIRM_SAVE": "Confirmer la sauvegarde de compte"
+		"CONFIRM_SAVE": "Confirmer la sauvegarde de compte",
+		"CURRENCY": "Devise"
 	},
 	"BUTTON": {
 		"APPLY": "Appliquer",
@@ -37,5 +38,11 @@
 	"SAVE_ALERT": {
 		"TITLE": "Sauvegarder ?",
 		"CONTENT": "Voulez-vous sauvegarder ?<br>Les données non sauvegardées seront perdues."
+	},
+	"PERMISSIONS": {
+		"WARNING": {
+			"TITLE": "Attention",
+			"CONTENT": "Cette application a besoin de l'autorisation de stockage pour fonctionner correctement.<br>Sans cela vous ne pourrez sauvegarder ni données ni paramètres.<br>S'il vous plait, acceptez cette autorisation pour utiliser cette application.<br>Si vous avez coché \"ne plus afficher\", allez dans les paramètres de votre téléphone -> applications -> BrocApp -> autorisations<br>et cochez l'autorisation de stockage."
+		}
 	}
 }

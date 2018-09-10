@@ -9,16 +9,11 @@ import { SettingsData } from '../../other/SettingsData';
 })
 export class SettingsPage {
 
-	private language: string;
-	private confirmSave = true;
-
 	constructor(
 		private translate: TranslateService,
 		private settings: SettingsData,
 		public navCtrl: NavController) 
 	{
-		this.language = this.translate.currentLang;
-		console.log("Language: " + this.translate.currentLang)
 	}
 
 	
@@ -29,9 +24,20 @@ export class SettingsPage {
 		console.log("language changed: " + value);
 	}
 
+	currencyChanged(value: string)
+	{
+		this.settings.setCurrency(value);
+		console.log("Currency changed: " + value);
+	}
+
 	confirmSaveChanged(value: any)
 	{
 		this.settings.setConfirmSave(value.checked);
 		console.log("Confirm save: " + value.checked);
+	}
+
+	ionViewWillLeave()
+	{
+		this.settings.saveSettings();
 	}
 }

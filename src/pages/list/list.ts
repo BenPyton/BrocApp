@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController, AlertController, ItemSliding } from 'ionic-angular';
-//import { File, DirectoryEntry } from '@ionic-native/file';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsData } from '../../other/SettingsData';
 import { EditItemPage } from '../EditItem/EditItem';
@@ -13,7 +12,7 @@ import { FileManager } from '../../other/FileManager';
   templateUrl: 'list.html'
 })
 export class ListPage {
-  selectedItem: any;
+  id: string;
   account: ItemList;
   totalGain: number = 0;
   private dirty:boolean = false;
@@ -30,118 +29,20 @@ export class ListPage {
   {
     // If we navigated to this page, we will have an item available as a nav param
     this.account = navParams.get('data');
-
-    // this.account = new ItemList("test", "this is a test", new Date());
-    // for (let i = 1; i < 11; i++) {
-    //   this.account.addItem(new Item('Item ' + i, 'This is item #' + i, 0));
-    // }
+    this.id = navParams.get('id');
+    console.log("Id: " + this.id);
   }
 
-  // strErr(err) : string
-  // {
-  //   return "Error: " + err.message + " | Code: " + err.code;
-  // }
 
-  // writeFile(directory: DirectoryEntry, fileName: string, content: string|Blob): Promise<{}>
-  // {
-  //   //console.log("Attempt to write file \"" + fileName + "\" ...");
-  //   return new Promise((resolve, reject) => 
-  //   {
-  //     this.file.checkFile(directory.nativeURL, fileName)
-  //     .then(() => 
-  //     {
-  //       //console.log("File \"" + fileName + "\" exists.");
-
-  //       //console.log("Path: " + directory.nativeURL);
-  //       //console.log("File: " + fileName);
-  //       this.file.writeExistingFile(directory.nativeURL, fileName, content)
-  //       .then(() => 
-  //       { 
-  //         //console.log("Writing to an existing file succeeded !"); 
-  //         resolve();
-  //       })
-  //       .catch((err) => 
-  //       { 
-  //         //console.log("Error while writing to an existing file: " + this.strErr(err)); 
-  //         throw new Error("Error while writing in existing file: " + err.message);
-          
-  //       });
-  //     })
-  //     .catch((err) => 
-  //     {
-  //       //console.log("Error: file \"" + fileName + "\" doesn't exists. Creating it...");
-  //       //console.log("Path: " + directory.nativeURL);
-  //       //console.log("File: " + fileName);
-  //       this.file.writeFile(directory.nativeURL, fileName, content)
-  //       .then(() => 
-  //       {
-  //         //console.log("Writing to a newly created file succeeded !");
-  //         resolve();
-  //       })
-  //       .catch((err) => 
-  //       { 
-  //         //console.log("Error while writing to a newly created file: " + this.strErr(err)); 
-  //         throw new Error("Error while writing in new file: " + err.message);
-  //       });
-  //     });
-  //   });
-  // }
-
-  // // try to get a dir and create it if don't exist. Return a DirectoryEntry.
-  // getDirectory(path: string, dirName: string): Promise<DirectoryEntry>
-  // {
-  //   //console.log("Attempt to get directory...");
-  //   return new Promise((resolve, reject) => 
-  //   {
-  //     // First check if the directory exists already
-  //     //console.log("Checking directory existence...");
-  //     this.file.checkDir(path, dirName)
-  //     .then(() => 
-  //     {
-  //       //console.log("Directory \"" + dirName + "\" exists.");
-  //       //console.log("Try to resolve directory url: " + (path + dirName));
-  //       this.file.resolveDirectoryUrl(path + dirName)
-  //       .then((dir) => {
-  //         //console.log("Resolve successful !");
-  //         resolve(dir);
-  //       })
-  //       .catch(err => 
-  //       {
-  //         //console.log("Error when resolving directory url: " + this.strErr(err));
-  //         throw new Error("Cannot resolving existing directory at: \"" + path + dirName + "\".");
-  //       });
-  //     })
-  //     .catch((err) => 
-  //     {
-  //       // file doesn't exist so we create and return it
-  //       //console.log("Directory \"" + dirName + "\" doesn't exists. Creating it...");
-  //       this.file.createDir(path, dirName, false)
-  //       .then(dir => {
-  //         //console.log("Directory \"" + dirName + "\" successfully created !");
-  //         resolve(dir);
-  //       })
-  //       .catch(() => {
-  //         //console.log("Error while directory creation: " + this.strErr(err));
-  //         throw new Error("Cannot create new directory at path: \"" + path + "\".");
-  //       });
-  //     });
-  //   });
-  // }
-
-
-  // Doesn't work yet
   saveFile()
   {
-    let dirName:string = 'mydir';
-    let fileName:string = 'test';
-    let content:string = 'This is a save test.';
     console.log("======== SAVING FILE ========");
-    this.fileMngr.getDirectory(this.fileMngr.getFileService().externalRootDirectory, dirName)
+    this.fileMngr.getDirectory(this.fileMngr.getAppDirectory().nativeURL, "accounts")
     .then((dir) =>
     { 
-      console.log("Full path: " + dir.fullPath);
       console.log("Native url: " + dir.nativeURL);
-      return this.fileMngr.writeFile(dir, fileName, content);
+      let content = JSON.stringify(this.account);
+      return this.fileMngr.writeFile(dir, this.id + ".account", content);
     })
     .then(() => 
     {
@@ -173,6 +74,7 @@ export class ListPage {
         if(!this.settings.getConfirmSave())
         {
           console.log("Auto Save");
+          this.saveFile();
           return resolve();
         }
         // else show confirm message
@@ -207,6 +109,7 @@ export class ListPage {
               text: buttonYes,
               handler: () => {
                 console.log("Saved !");
+                this.saveFile();
                 resolve();
               }
             }
@@ -258,14 +161,43 @@ export class ListPage {
 
   testJSON()
   {
-      // let data = JSON.stringify(this.account);
-      // let account = ItemList.fromJSON(JSON.parse(data));
-      // console.log("Data : " + data);
-      // console.log("List name: " + account.getName());
-      // console.log("List length: " + account.getLength());
-      // console.log("Items 1: " + account.getArray()[0].toString());
-      // console.log("Items 1 name: " + account.getArray()[0].getName());
-      this.saveFile();
+    let dirName = "BrocApp";
+    // let data = JSON.stringify(this.account);
+    // let account = ItemList.fromJSON(JSON.parse(data));
+    // console.log("Data : " + data);
+    // console.log("List name: " + account.getName());
+    // console.log("List length: " + account.getLength());
+    // console.log("Items 1: " + account.getArray()[0].toString());
+    // console.log("Items 1 name: " + account.getArray()[0].getName());
+    //this.saveFile();
+    this.fileMngr.getDirectory(this.fileMngr.getFileService().externalRootDirectory, dirName)
+    .then((dir) => {
+      // return this.fileMngr.listFiles(dir)
+      // .then((entries) => {
+      //   console.log("List files of directory: " + dirName);
+      //   for(let i = 0; i < entries.length; i++)
+      //   {
+      //     console.log("File: " + entries[i].name);
+      //   }
+      // });
+
+      //return this.fileMngr.getFileService().listDir(this.fileMngr.getFileService().externalRootDirectory, dirName);
+      // return new Promise<Entry[]>((resolve, reject) => {
+      //   let reader:DirectoryReader = dir.createReader();
+      //   reader.readEntries((entries) => resolve(entries), (err) => reject(err));
+      // });
+      return this.fileMngr.listFiles(dir);
+    })
+    .then((entries) => { 
+        for(let i = 0; i < entries.length; i++)
+        {
+          console.log("File: " + entries[i].name);
+        }
+      console.log("End.")
+    })
+    .catch((err) => {
+      console.log("Error: " + err.message);
+    });
   }
 
 }

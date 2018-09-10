@@ -22,7 +22,8 @@
 	},
 	"SETTINGS": {
 		"LANGUAGE": "Language",
-		"CONFIRM_SAVE": "Confirm account save"
+		"CONFIRM_SAVE": "Confirm account save",
+		"CURRENCY": "Currency"
 	},
 	"BUTTON": {
 		"APPLY": "Apply",
@@ -37,5 +38,11 @@
 	"SAVE_ALERT": {
 		"TITLE": "Save ?",
 		"CONTENT": "Do you want to save ?<br>Not saved data will be lost."
+	},
+	"PERMISSIONS": {
+		"WARNING": {
+			"TITLE": "Warning",
+			"CONTENT": "This application need storage permission to run correctly.<br>Without it you cannot save any data nor settings.<br>Please accept permission if you want to use this application.<br>If you've checked \"Don't show anymore\", please go in your phone settings -> applications -> BrocApp -> permissions<br>and check storage permission."
+		}
 	}
 }

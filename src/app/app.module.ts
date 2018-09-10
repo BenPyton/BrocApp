@@ -15,9 +15,11 @@ import { EditItemPage } from '../pages/EditItem/EditItem';
 import { EditAccountPage } from '../pages/EditAccount/EditAccount';
 import { SettingsData } from '../other/SettingsData';
 import { FileManager } from '../other/FileManager';
+import { FileService } from '../other/FileService';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.lang');
@@ -60,6 +62,8 @@ export function createTranslateLoader(http: HttpClient) {
     Keyboard,
     SettingsData,
     FileManager,
+    FileService,
+    AndroidPermissions,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

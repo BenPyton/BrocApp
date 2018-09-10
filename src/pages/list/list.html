@@ -5,7 +5,7 @@
     </button>
     <ion-title>
       {{account.getName()}}
-      <div [style.color]="'green'" [style.font-weight]="'bold'" float-right>{{account.getTotal().toFixed(2)}} €</div>
+      <div [style.color]="'green'" [style.font-weight]="'bold'" float-right>{{account.getTotal().toFixed(2)}} {{settings.getCurrency()}}</div>
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -18,7 +18,7 @@
       <!-- <ion-icon [name]="item.icon" item-start></ion-icon> -->
       <ion-item>
         {{item.getName()}}
-        <div float-right item-end margin-right>{{item.getPrice().toFixed(2)}} €</div>
+        <div float-right item-end margin-right>{{item.getPrice().toFixed(2)}} {{settings.getCurrency()}}</div>
       </ion-item>
       <ion-item-options side="right" no-margin>
         <button ion-button icon-only color="primary" class="slider-padding" (click)="editItem($event, item, sliding)">
@@ -34,7 +34,7 @@
   </ion-list>
 
 
-  <button ion-button full (click)="testJSON()">Test</button>
+  <!-- <button ion-button full (click)="testJSON()">Test</button> -->
 
 
 </ion-content>

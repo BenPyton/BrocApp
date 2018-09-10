@@ -9,10 +9,10 @@
 
 <ion-content>
   <ion-list>
-    <ion-item-sliding #sliding *ngFor="let account of accounts" >   
+    <ion-item-sliding #sliding *ngFor="let account of accountList" >   
       <button ion-item (click)="openAccount($event, account)">     
-        {{account.getName()}}
-        <div item-end>{{account.getTotal().toFixed(2)}} €</div>
+        {{account.data.getName()}}
+        <div item-end>{{account.data.getTotal().toFixed(2)}} {{settings.getCurrency()}}</div>
       </button>
       <ion-item-options side="right" no-margin>
         <button ion-button icon-only color="primary" class="slider-padding" (click)="editAccount($event, account, sliding)">

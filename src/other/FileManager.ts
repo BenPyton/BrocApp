@@ -3,9 +3,46 @@ import { File, DirectoryEntry, FileEntry, DirectoryReader, FileReader } from '@i
 
 @Injectable()
 export class FileManager {
+
+	private appDirectory: DirectoryEntry;
+	private appDirectoryLoaded: boolean = false;
+
 	constructor(private file: File)
 	{
+		console.log("FileManager constructor");
+	}
 
+	getAppDirectory(): DirectoryEntry { return this.appDirectory; }
+	setAppDirectory(dirName: string): Promise<any>
+	{ 
+		this.appDirectoryLoaded = false;
+		return new Promise((resolve, reject) => {
+			this.getDirectory(this.file.externalRootDirectory, dirName)
+			.then((dir) => 
+			{
+				this.appDirectory = dir;
+				this.appDirectoryLoaded = true;
+				resolve();
+			})
+			.catch((err) => 
+			{
+				console.error("[ERROR] Cannot get directory \"" + dirName + "\": " + err.message);
+				reject(err);
+			});
+		});
+	}
+
+	isAppDirectoryLoaded(): Promise<any>
+	{
+		return new Promise((resolve, reject) => {
+			let waitForLoad = () =>
+			{
+				if(this.appDirectoryLoaded) return resolve();
+				console.log("Polling for app directory loaded...")
+				setTimeout(waitForLoad, 30); // Relaunch function after 30ms
+			}
+			waitForLoad();
+		});
 	}
 
 	private strErr(err) : string
@@ -39,29 +76,40 @@ export class FileManager {
 				.catch((err) => 
 				{ 
 					//console.log("Error while writing to an existing file: " + this.strErr(err)); 
-					throw new Error("Error while reading in file: " + err.message);
+					reject(new Error("Error while reading in file: " + err.message));
 
 				});
 			})
 			.catch((err) => 
 			{ 
-				throw new Error("Error file doesn't exist: " + err.message);
+				//throw new Error("File doesn't exist: " + err.message);
+				reject(new Error("File doesn't exist: " + err.message));
 			});
 		});
 	}
 
-	testFile(file: FileEntry): Promise<string>
+	readFile(file: FileEntry): Promise<string>
 	{
 		return new Promise((resolve, reject) => 
 		{
-			file.file((f) => {
-				let reader: FileReader = new FileReader();
-				reader.onloadend = (event) => 
-				{ 
-					console.log("File loaded: " + reader.result);
-					resolve(reader.result); 
-				};
-				reader.readAsText(f);
+			//console.log("Attempting to read file...");
+			// let reader = new FileReader();
+			// console.log("Reader: " + reader);
+			// reader.onloadend = (event) => { 
+			// 	console.log("File loaded: " + reader.result);
+			// 	resolve(reader.result as string); 
+			// };
+			// file.file((f) => {
+			// 	console.log("Try to read file");
+			// 	reader.readAsText(f);
+			// });
+			file.getParent((parent) => {
+				this.file.readAsText(parent.nativeURL, file.name)
+				.then((content) => { 
+					//console.log("Successfully read !");
+					resolve(content); 
+				})
+				.catch((err) => reject(err) );
 			});
 		});
 	}
@@ -87,7 +135,7 @@ export class FileManager {
 				.catch((err) => 
 				{ 
 					//console.log("Error while writing to an existing file: " + this.strErr(err)); 
-					throw new Error("Error while writing in existing file: " + err.message);
+					reject(new Error("Error while writing in existing file: " + err.message));
 
 				});
 			})
@@ -105,7 +153,7 @@ export class FileManager {
 				.catch((err) => 
 				{ 
 					//console.log("Error while writing to a newly created file: " + this.strErr(err)); 
-					throw new Error("Error while writing in new file: " + err.message);
+					reject(new Error("Error while writing in new file: " + err.message));
 				});
 			});
 		});
@@ -118,11 +166,11 @@ export class FileManager {
 		return new Promise((resolve, reject) => 
 		{
 			// First check if the directory exists already
-			//console.log("Checking directory existence...");
+			console.log("Checking directory existence...");
 			this.file.checkDir(path, dirName)
 			.then(() => 
 			{
-				//console.log("Directory \"" + dirName + "\" exists.");
+				console.log("Directory \"" + dirName + "\" exists.");
 				//console.log("Try to resolve directory url: " + (path + dirName));
 				this.file.resolveDirectoryUrl(path + dirName)
 				.then((dir) => {
@@ -132,13 +180,13 @@ export class FileManager {
 				.catch(err => 
 				{
 					//console.log("Error when resolving directory url: " + this.strErr(err));
-					throw new Error("Cannot resolving existing directory at: \"" + path + dirName + "\".");
+					reject(new Error("Cannot resolving existing directory at: \"" + path + dirName + "\"."));
 				});
 			})
 			.catch((err) => 
 			{
 				// file doesn't exist so we create and return it
-				//console.log("Directory \"" + dirName + "\" doesn't exists. Creating it...");
+				console.log("Directory \"" + dirName + "\" doesn't exists. Creating it...");
 				this.file.createDir(path, dirName, false)
 				.then(dir => {
 					//console.log("Directory \"" + dirName + "\" successfully created !");
@@ -146,7 +194,7 @@ export class FileManager {
 				})
 				.catch(() => {
 					//console.log("Error while directory creation: " + this.strErr(err));
-					throw new Error("Cannot create new directory at path: \"" + path + "\".");
+					reject(new Error("Cannot create new directory at path: \"" + path + "\"."));
 				});
 			});
 		});
@@ -159,17 +207,24 @@ export class FileManager {
 
 		return new Promise((resolve, reject) => 
 		{
+			//console.log("Directory: " + directory.nativeURL);
 			let reader:DirectoryReader = directory.createReader();
+			//console.log("Reader: " + reader.localURL);
 			reader.readEntries((entries) => {
+				//console.log("Reading " + entries.length + " entries...");
 				for(let i = 0; i < entries.length; i++)
 				{
+					//console.log("Entry \"" + entries[i].name + "\" is file: " + (entries[i].isFile ? "yes" : "no"));
 					if(entries[i].isFile)
 					{
 						files.push(entries[i] as FileEntry);
 					}
 				}
 				resolve(files);
+			}, (error) => {
+				//console.log("Error while reading directory entries.");
+				reject(new Error("Error while reading directory entries."));
 			});
-		}
+		});
 	}
 }
