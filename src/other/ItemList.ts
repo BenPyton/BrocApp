@@ -76,7 +76,7 @@ export class ItemList
 
 	static fromJSON(json: ItemListJSON): ItemList {
 		let itemList = Object.create(ItemList.prototype);
-		console.log(json.items);
+		//console.log(json.items);
 		return Object.assign(itemList, json, {
 			date: new Date(json.date),
 			items: Array.from<object, Item>(json.items, 

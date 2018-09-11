@@ -10,18 +10,16 @@
 <ion-content>
   <ion-list>
     <ion-item-sliding #sliding *ngFor="let account of accountList" >   
-      <button ion-item (click)="openAccount($event, account)">     
+      <button ion-item (tap)="openAccount($event, account)" (press)="editAccount($event, account, null)">     
         {{account.data.getName()}}
         <div item-end>{{account.data.getTotal().toFixed(2)}} {{settings.getCurrency()}}</div>
       </button>
       <ion-item-options side="right" no-margin>
-        <button ion-button icon-only color="primary" class="slider-padding" (click)="editAccount($event, account, sliding)">
-          <ion-icon name="create"></ion-icon>
-        </button>
-      </ion-item-options>
-      <ion-item-options side="left" no-margin>
-        <button ion-button icon-only color="danger" class="slider-padding" (click)="deleteAccount($event, account)">
+        <button ion-button icon-only color="danger" class="slider-padding" (tap)="deleteAccount($event, account, sliding)">
           <ion-icon name="trash"></ion-icon>
+        </button>
+        <button ion-button icon-only color="primary" class="slider-padding" (tap)="editAccount($event, account, sliding)">
+          <ion-icon name="create"></ion-icon>
         </button>
       </ion-item-options>
     </ion-item-sliding>

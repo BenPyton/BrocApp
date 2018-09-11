@@ -55,6 +55,21 @@ export class FileManager {
 		return this.file;
 	}
 
+	deleteFile(file:FileEntry): Promise<any>
+	{
+		return new Promise((resolve, reject) => {
+			file.getParent((parent) => {
+				this.file.removeFile(parent.nativeURL, file.name)
+				.then(result => {
+					if(result.success) resolve();
+					else reject(new Error("Cannont remove file \"" + file.nativeURL + "\"."));
+				})
+				.catch((err) => reject(err));
+			}, (err) => reject(err));
+		});
+
+	}
+
 	loadFile(directory: DirectoryEntry, fileName: string): Promise<string>
 	{
 		//console.log("Attempt to write file \"" + fileName + "\" ...");

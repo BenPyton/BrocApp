@@ -21,13 +21,11 @@
         <div float-right item-end margin-right>{{item.getPrice().toFixed(2)}} {{settings.getCurrency()}}</div>
       </ion-item>
       <ion-item-options side="right" no-margin>
-        <button ion-button icon-only color="primary" class="slider-padding" (click)="editItem($event, item, sliding)">
-          <ion-icon name="create"></ion-icon>
-        </button>
-      </ion-item-options>
-      <ion-item-options side="left" no-margin>
         <button ion-button icon-only color="danger" class="slider-padding" (click)="deleteItem($event, item)">
           <ion-icon name="trash"></ion-icon>
+        </button>
+        <button ion-button icon-only color="primary" class="slider-padding" (click)="editItem($event, item, sliding)">
+          <ion-icon name="create"></ion-icon>
         </button>
       </ion-item-options>
     </ion-item-sliding>

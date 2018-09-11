@@ -6,6 +6,7 @@ import { EditItemPage } from '../EditItem/EditItem';
 import { Item } from '../../other/ItemModel';
 import { ItemList } from '../../other/ItemList';
 import { FileManager } from '../../other/FileManager';
+import { FileService } from '../../other/FileService';
 
 @Component({
   selector: 'page-list',
@@ -18,8 +19,8 @@ export class ListPage {
   private dirty:boolean = false;
 
   constructor(
-    //private file:File,
     private fileMngr: FileManager,
+    private file: FileService,
     private alertCtrl: AlertController,
     private translate: TranslateService,
     private settings: SettingsData,
@@ -34,32 +35,32 @@ export class ListPage {
   }
 
 
-  saveFile()
-  {
-    console.log("======== SAVING FILE ========");
-    this.fileMngr.getDirectory(this.fileMngr.getAppDirectory().nativeURL, "accounts")
-    .then((dir) =>
-    { 
-      console.log("Native url: " + dir.nativeURL);
-      let content = JSON.stringify(this.account);
-      return this.fileMngr.writeFile(dir, this.id + ".account", content);
-    })
-    .then(() => 
-    {
-      console.log("=========== END ============");
-    })
-    .catch(err => 
-    {
-      console.log("[ERROR] " + err.message);
-      let alert = this.alertCtrl.create({
-        title: "ERROR",
-        message: err.message,
-        buttons: ['Ok']
-      });
-      // Present the alert to the user
-      alert.present();
-    });
-  }
+  // saveFile()
+  // {
+  //   console.log("======== SAVING FILE ========");
+  //   this.fileMngr.getDirectory(this.fileMngr.getAppDirectory().nativeURL, "accounts")
+  //   .then((dir) =>
+  //   { 
+  //     console.log("Native url: " + dir.nativeURL);
+  //     let content = JSON.stringify(this.account);
+  //     return this.fileMngr.writeFile(dir, this.id + ".account", content);
+  //   })
+  //   .then(() => 
+  //   {
+  //     console.log("=========== END ============");
+  //   })
+  //   .catch(err => 
+  //   {
+  //     console.log("[ERROR] " + err.message);
+  //     let alert = this.alertCtrl.create({
+  //       title: "ERROR",
+  //       message: err.message,
+  //       buttons: ['Ok']
+  //     });
+  //     // Present the alert to the user
+  //     alert.present();
+  //   });
+  // }
 
  
 
@@ -74,13 +75,13 @@ export class ListPage {
         if(!this.settings.getConfirmSave())
         {
           console.log("Auto Save");
-          this.saveFile();
+          this.file.saveAccount({data: this.account, id: this.id});
           return resolve();
         }
         // else show confirm message
 
-        let alertTitle: string = this.translate.instant("SAVE_ALERT.TITLE");
-        let alertContent: string = this.translate.instant("SAVE_ALERT.CONTENT");
+        let alertTitle: string = this.translate.instant("ALERT.TITLE.SAVE");
+        let alertContent: string = this.translate.instant("ALERT.CONTENT.SAVE");
         let buttonCancel: string = this.translate.instant("BUTTON.CANCEL");
         let buttonYes: string = this.translate.instant("BUTTON.YES");
         let buttonNo: string = this.translate.instant("BUTTON.NO");
@@ -109,7 +110,7 @@ export class ListPage {
               text: buttonYes,
               handler: () => {
                 console.log("Saved !");
-                this.saveFile();
+                this.file.saveAccount({data: this.account, id: this.id});
                 resolve();
               }
             }
@@ -135,11 +136,11 @@ export class ListPage {
         {
           item.setName(data.name);
           item.setDescription(data.description);
-          item.setPrice(data.price);
+          item.setPrice(Number.parseFloat(data.price.replace(/,/, '.')));
         }
         else // create element in the list and store data into it
         {
-          this.account.addItem(new Item(data.name, data.description, data.price));
+          this.account.addItem(new Item(data.name, data.description, Number.parseFloat(data.price)));
         }
         
         this.dirty = true;

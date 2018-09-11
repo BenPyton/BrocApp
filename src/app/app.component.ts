@@ -90,7 +90,7 @@ export class MyApp {
           .then((result) => {
             console.log("Result: " + result.hasPermission);
             if(result.hasPermission == false)
-              this.showWarningMessage(this.translate.instant("PERMISSIONS.WARNING"))
+              this.showWarningMessage(this.translate.instant("ALERT.CONTENT.PERMISSIONS"))
               .then(() => resolve(false));
             else
               resolve(true);
@@ -112,7 +112,7 @@ export class MyApp {
   {
     return new Promise((resolve, reject) =>
     {
-      let alertTitle: string = "Warning";
+      let alertTitle: string = this.translate.instant("ALERT.TITLE.WARNING");
       let alertContent: string = content;
       let buttonOk: string = this.translate.instant("BUTTON.OK");
 

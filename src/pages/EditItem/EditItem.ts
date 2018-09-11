@@ -29,7 +29,7 @@ export class EditItemPage {
     this.group = this.formBuilder.group({
       name: [data.getName(), Validators.required],
       description: [data.getDescription()],
-      price: [data.getPrice()]
+      price: [data.getPrice().toFixed(2), Validators.compose([Validators.required, Validators.pattern(/-?[0123456789]+((,|\.)[0123456789]*)?/)])]
     });
   }
 
@@ -43,14 +43,15 @@ export class EditItemPage {
 
   addPrice(value: number)
   {
-    let newValue:number = this.group.value.price + value;
-    this.group.get('price').setValue(Number.parseFloat(newValue.toFixed(2)));
+    let str:string = this.group.value.price;
+    let newValue:number = ((str.length > 0) ? Number.parseFloat(str.replace(/,/, '.')) : 0) + value;
+    this.group.get('price').setValue(newValue.toFixed(2));
     //console.log("added price: " + value + " | total price: " + this.group.value.price);
   }
 
   resetPrice()
   {
-    this.group.get('price').setValue(0);
+    this.group.get('price').setValue((0).toFixed(2));
   }
 
 

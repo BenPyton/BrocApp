@@ -11,6 +11,10 @@ export interface Account{
 
 @Injectable()
 export class FileService {
+
+	readonly accountDirectory = "accounts";
+	readonly accountExtension = ".account";
+
 	constructor(private file: FileManager)
 	{
 
@@ -19,15 +23,14 @@ export class FileService {
 
 	saveAccount(account: Account): Promise<any>
 	{
-
 		return new Promise((resolve, reject) => {
 			console.log("======== SAVING FILE ========");
-			this.file.getDirectory(this.file.getAppDirectory().nativeURL, "accounts")
+			this.file.getDirectory(this.file.getAppDirectory().nativeURL, this.accountDirectory)
 			.then((dir) =>
 			{ 
 				console.log("Native url: " + dir.nativeURL);
 				let content = JSON.stringify(account.data);
-				return this.file.writeFile(dir, account.id + ".account", content);
+				return this.file.writeFile(dir, account.id + this.accountExtension, content);
 			})
 			.then(() => 
 			{
@@ -63,7 +66,7 @@ export class FileService {
 		return new Promise((resolve, reject) => {
 			this.file.isAppDirectoryLoaded()
 			.then(() => {
-				this.file.getDirectory(this.file.getAppDirectory().nativeURL, "accounts")
+				this.file.getDirectory(this.file.getAppDirectory().nativeURL, this.accountDirectory)
 				.then((dir) => {
 					return this.file.listFiles(dir);
 				})
@@ -81,6 +84,7 @@ export class FileService {
 							if(complete >= entries.length)
 							{
 								console.log("All files loaded !");
+								accountList.sort((a, b) => { return (b.data.getDate() > a.data.getDate()) ? 1 : -1; });
 								resolve(accountList);
 							}
 						})
@@ -89,6 +93,35 @@ export class FileService {
 
 				})
 				.catch((err) => reject(err));
+			});
+		});
+	}
+
+	deleteAccount(account: Account): Promise<any>
+	{
+		return new Promise((resolve, reject) => {
+			console.log("======== DELETING FILE ========");
+			this.file.getDirectory(this.file.getAppDirectory().nativeURL, this.accountDirectory)
+			.then((dir) =>
+			{ 
+				console.log("Native url: " + dir.nativeURL);
+				return new Promise<FileEntry>((resolve, reject) => {
+					dir.getFile(account.id + this.accountExtension, null, (file) => resolve(file), (err) => reject(err));
+				});
+			})
+			.then((file) => {
+				console.log("File URL: " + file.nativeURL);
+				return this.file.deleteFile(file);
+			})
+			.then(() => 
+			{
+				console.log("=========== END ============");
+				resolve();
+			})
+			.catch(err => 
+			{
+				console.error("[ERROR] " + err.message);
+				reject(err);
 			});
 		});
 	}
