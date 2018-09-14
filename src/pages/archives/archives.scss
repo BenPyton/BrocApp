@@ -1,15 +1,9 @@
-page-list {
-	
+page-archives {
 	.slider-padding{
 		padding: 0 !important;
 	}
 	.no-margin{
 		margin: 0!important;
-	}
-	.total {
-		padding-right: 16px !important;
-		font-size: 3rem;
-		font-weight: bold;
 	}
 	.right-button {
 		padding-left: 8px !important;
@@ -23,5 +17,12 @@ page-list {
 		font-size: 2em;
 		height: 2.5em;
 		text-transform: none;
+	}
+	.account-date {
+		text-align: right !important;
+		color: map-get($colors, light) !important;
+	}
+	.account-total {
+		text-align: right !important;
 	}
 }

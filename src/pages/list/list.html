@@ -1,38 +1,54 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>
-      {{account.getName()}}
-      <div [style.color]="'green'" [style.font-weight]="'bold'" float-right>{{account.getTotal().toFixed(2)}} {{settings.getCurrency()}}</div>
-    </ion-title>
+  <ion-navbar hideBackButton>
+    <ion-buttons left>
+      <ng-container *ngIf="selectionMode; then closebutton else backbutton"></ng-container>
+      <ng-template #backbutton>
+          <button class="right-button" ion-button clear icon-only (tap)="navCtrl.pop()">
+            <ion-icon name="arrow-back"></ion-icon>
+          </button>
+        </ng-template>
+        <ng-template #closebutton>
+          <button class="right-button" ion-button clear icon-only (tap)="disableSelectionMode()">
+            <ion-icon name="close"></ion-icon>
+          </button>
+        </ng-template>
+    </ion-buttons>
+
+    <ion-title> {{account.getName()}} </ion-title>
+    
+    <ion-buttons right>
+      <div class="total" *ngIf="!selectionMode" [style.color]="account.getTotal() < 0 ? 'red' : 'green'">{{account.getTotal().toFixed(2)}} {{settings.getCurrency()}}</div>
+
+      <button class="left-button" ion-button clear icon-only *ngIf="selectionMode" (tap)="deleteSelection()">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content>
+  <ion-row  *ngIf="account.getArray().length == 0" align-items-center style="height: 100% !important;">
+    <ion-col text-center>
+        <ion-label color="light">{{'LIST.NO_ITEM' | translate}}</ion-label>
+    </ion-col>
+  </ion-row>
 
   <ion-list>
-    <ion-item-sliding #sliding *ngFor="let item of account.getArray()">
+    <ion-item-sliding #sliding *ngFor="let item of account.getArray(); let i = index">
       <!-- <ion-icon [name]="item.icon" item-start></ion-icon> -->
-      <ion-item>
+      <button ion-item (tap)="selectionMode ? toggleSelection(i) : null" (press)="enableSelectionMode(i)">
+        <ion-icon class="no-margin" item-start color="primary" *ngIf="selectionMode" [name]="checkSelection(i) ? 'checkbox' : 'square-outline'"></ion-icon>
         {{item.getName()}}
         <div float-right item-end margin-right>{{item.getPrice().toFixed(2)}} {{settings.getCurrency()}}</div>
-      </ion-item>
+      </button>
       <ion-item-options side="right" no-margin>
-        <button ion-button icon-only color="danger" class="slider-padding" (click)="deleteItem($event, item)">
-          <ion-icon name="trash"></ion-icon>
-        </button>
-        <button ion-button icon-only color="primary" class="slider-padding" (click)="editItem($event, item, sliding)">
+        <button ion-button icon-only color="primary" class="slider-padding" (tap)="editItem($event, item, sliding)">
           <ion-icon name="create"></ion-icon>
         </button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-
-
-  <!-- <button ion-button full (click)="testJSON()">Test</button> -->
 
 
 </ion-content>

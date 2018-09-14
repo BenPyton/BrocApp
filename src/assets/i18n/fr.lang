@@ -2,31 +2,41 @@
 	"MENU": {
 		"MENU": "Menu",
 		"HOME": "Accueil",
-		"SETTINGS": "Paramètres"
+		"SETTINGS": "Paramètres",
+		"ARCHIVES": "Archives"
 	},
 	"HOME": {
+		"NO_ACCOUNT": "Il n'y a pas de compte.",
 		"NEW_ACCOUNT": "Nouveau Compte"
 	},
 	"ACCOUNT": {
+		"HEADER": "Editer le compte",
 		"TITLE": "Titre",
 		"DESCRIPTION": "Description",
 		"DATE": "Date"
 	},
 	"LIST": {
+		"NO_ITEM": "Il n'y a pas de vente.",
 		"NEW_ITEM": "Nouvelle Vente"
 	},
 	"ITEM": {
+		"HEADER": "Editer la vente",
 		"NAME": "Nom",
 		"DESCRIPTION": "Description",
 		"PRICE": "Prix"
 	},
+	"ARCHIVE":{
+		"NO_ARCHIVE": "Il n'y a pas d'archive."
+	},
 	"SETTINGS": {
 		"LANGUAGE": "Langue",
 		"CONFIRM_SAVE": "Confirmer la sauvegarde de compte",
-		"CURRENCY": "Devise"
+		"CURRENCY": "Devise",
+		"DEFAULT_CURRENCY": "€"
 	},
 	"BUTTON": {
 		"APPLY": "Appliquer",
+		"DONE": "Terminer",
 		"CANCEL": "Annuler",
 		"YES": "Oui",
 		"NO": "Non",
@@ -39,12 +49,27 @@
 		"TITLE": {
 			"WARNING": "Attention",
 			"ERROR": "Erreur",
-			"SAVE": "Sauvegarder ?"
+			"SAVE": "Sauvegarder ?",
+			"QUIT": "Quitter ?"
 		},
 		"CONTENT": {
 			"SAVE": "Voulez-vous sauvegarder ?<br>Les données non sauvegardées seront perdues.",
 			"PERMISSIONS": "Cette application a besoin de l'autorisation de stockage pour fonctionner correctement.<br>Sans cela vous ne pourrez sauvegarder ni données ni paramètres.<br>S'il vous plait, acceptez cette autorisation pour utiliser cette application.<br>Si vous avez coché \"ne plus afficher\", allez dans les paramètres de votre téléphone -> applications -> BrocApp -> autorisations<br>et cochez l'autorisation de stockage.",
-			"DELETE_ACCOUNT": "Voulez-vous vraiment supprimer ce compte ?<br>Les données supprimées ne pourront pas être récupérées."
+			"ARCHIVE_ACCOUNT": "Voulez-vous vraiment archiver ces comptes ?<br>Vous ne pourrez plus modifier les comptes archivés.",
+			"DELETE_ACCOUNT": "Voulez-vous vraiment supprimer ces comptes ?<br>Les données supprimées ne pourront pas être récupérées.",
+			"DELETE_ITEM": "Voulez-vous vraiment supprimer ces ventes ?<br>Les données supprimées ne pourront pas être récupérées.",
+			"DELETE_ARCHIVE": "Voulez-vous vraiment supprimer ces archives ?<br>Les données supprimées ne pourront pas être récupérées.",
+			"QUIT": "Êtes-vous sûr de vouloir quitter cette application ?"
+		}
+	},
+	"DATE": {
+		"MONTH": {
+			"FULL": "Janvier, Février, Mars, Avril, Mai, Juin, Juillet, Août, Septembre, Octobre, Novembre, Décembre",
+			"SHORT": "Jan, Fév, Mar, Avr, Mai, Jun, Jul, Aoû, Sep, Oct, Nov, Déc"
+		},
+		"DAY": {
+			"FULL": "Dimanche, Lundi, Mardi, Mercredi, Jeudi, Vendredi, Samedi",
+			"SHORT": "Dim, Lun, Mar, Mer, Jeu, Ven, Sam"
 		}
 	}
 }

@@ -2,31 +2,41 @@
 	"MENU": {
 		"MENU": "Menu",
 		"HOME": "Home",
-		"SETTINGS": "Settings"
+		"SETTINGS": "Settings",
+		"ARCHIVES": "Archives"
 	},
 	"HOME": {
+		"NO_ACCOUNT": "There is no account.",
 		"NEW_ACCOUNT": "New Account"
 	},
 	"ACCOUNT": {
+		"HEADER": "Edit Account",
 		"TITLE": "Title",
 		"DESCRIPTION": "Description",
 		"DATE": "Date"
 	},
 	"LIST": {
+		"NO_ITEM": "There is no sale.",
 		"NEW_ITEM": "New Sale"
 	},
 	"ITEM": {
+		"HEADER": "Edit Sale",
 		"NAME": "Name",
 		"DESCRIPTION": "Description",
 		"PRICE": "Price"
 	},
+	"ARCHIVE":{
+		"NO_ARCHIVE": "There is no archive."
+	},
 	"SETTINGS": {
 		"LANGUAGE": "Language",
 		"CONFIRM_SAVE": "Confirm account save",
-		"CURRENCY": "Currency"
+		"CURRENCY": "Currency",
+		"DEFAULT_CURRENCY": "$"
 	},
 	"BUTTON": {
 		"APPLY": "Apply",
+		"DONE": "Done",
 		"CANCEL": "Cancel",
 		"YES": "Yes",
 		"NO": "No",
@@ -39,12 +49,27 @@
 		"TITLE": {
 			"WARNING": "Warning",
 			"ERROR": "Error",
-			"SAVE": "Save?"
+			"SAVE": "Save?",
+			"QUIT": "Leave?"
 		},
 		"CONTENT": {
 			"SAVE": "Do you want to save ?<br>Not saved data will be lost.",
 			"PERMISSIONS": "This application need storage permission to run correctly.<br>Without it you cannot save any data nor settings.<br>Please accept permission if you want to use this application.<br>If you've checked \"Don't show anymore\", please go in your phone settings -> applications -> BrocApp -> permissions<br>and check storage permission.",
-			"DELETE_ACCOUNT": "Do you really want to remove this account?<br>Deleted data cannot get back."
+			"ARCHIVE_ACCOUNT": "Do you really want to archive those accounts?<br>You cannot edit archived account anymore.",
+			"DELETE_ACCOUNT": "Do you really want to remove those accounts?<br>Deleted data cannot be recovered.",
+			"DELETE_ITEM": "Do you really want to remove those sales?<br>Deleted data cannot be recovered.",
+			"DELETE_ARCHIVE": "Do you really want to remove those archives?<br>Deleted data cannot be recovered.",
+			"QUIT": "Are you sure you want to leave this application?"
+		}
+	},
+	"DATE": {
+		"MONTH": {
+			"FULL": "January, February, March, April, May, June, July, August, September, October, November, December",
+			"SHORT": "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
+		},
+		"DAY": {
+			"FULL": "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday",
+			"SHORT": "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
 		}
 	}
 }

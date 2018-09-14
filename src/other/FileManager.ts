@@ -4,45 +4,9 @@ import { File, DirectoryEntry, FileEntry, DirectoryReader, FileReader } from '@i
 @Injectable()
 export class FileManager {
 
-	private appDirectory: DirectoryEntry;
-	private appDirectoryLoaded: boolean = false;
-
 	constructor(private file: File)
 	{
 		console.log("FileManager constructor");
-	}
-
-	getAppDirectory(): DirectoryEntry { return this.appDirectory; }
-	setAppDirectory(dirName: string): Promise<any>
-	{ 
-		this.appDirectoryLoaded = false;
-		return new Promise((resolve, reject) => {
-			this.getDirectory(this.file.externalRootDirectory, dirName)
-			.then((dir) => 
-			{
-				this.appDirectory = dir;
-				this.appDirectoryLoaded = true;
-				resolve();
-			})
-			.catch((err) => 
-			{
-				console.error("[ERROR] Cannot get directory \"" + dirName + "\": " + err.message);
-				reject(err);
-			});
-		});
-	}
-
-	isAppDirectoryLoaded(): Promise<any>
-	{
-		return new Promise((resolve, reject) => {
-			let waitForLoad = () =>
-			{
-				if(this.appDirectoryLoaded) return resolve();
-				console.log("Polling for app directory loaded...")
-				setTimeout(waitForLoad, 30); // Relaunch function after 30ms
-			}
-			waitForLoad();
-		});
 	}
 
 	private strErr(err) : string

@@ -14,55 +14,51 @@
         </ng-template>
     </ion-buttons>
 
-    <ion-title> {{'MENU.HOME' | translate}} </ion-title>
+    <ion-title> {{'MENU.ARCHIVES' | translate}} </ion-title>
 
     <ion-buttons right>
       <button class="left-button" ion-button clear icon-only *ngIf="selectionMode" (tap)="deleteSelection()">
         <ion-icon name="trash"></ion-icon>
-      </button>
-      <button class="left-button" ion-button clear icon-only *ngIf="selectionMode" (tap)="archiveSelection()">
-        <ion-icon name="archive"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-
-  <ion-row *ngIf="loadingAccounts || accountList.length == 0" align-items-center style="height: 100% !important;">
+  <ion-row *ngIf="loadingArchives || archiveList.length == 0" align-items-center style="height: 100% !important;">
     <ion-col text-center>
-      <div *ngIf="!loadingAccounts && accountList.length == 0">
-        <ion-label color="light">{{'HOME.NO_ACCOUNT' | translate}}</ion-label>
+      <div *ngIf="!loadingArchives && archiveList.length == 0">
+        <ion-label color="light">{{'ARCHIVE.NO_ARCHIVE' | translate}}</ion-label>
       </div>
 
-      <ion-spinner class="loading" *ngIf="loadingAccounts"></ion-spinner>
+      <ion-spinner class="loading" *ngIf="loadingArchives"></ion-spinner>
     </ion-col>
   </ion-row>
 
   <ion-list>
-    <ion-item-sliding #sliding *ngFor="let account of accountList; let i = index" >
+    <ion-item-sliding #sliding *ngFor="let archive of archiveList; let i = index" >
 
-      <button ion-item (tap)="selectionMode ? toggleSelection(i) : openAccount($event, account)" (press)="enableSelectionMode(i)">
+      <button ion-item (tap)="selectionMode ? toggleSelection(i) : openArchive($event, archive)" (press)="enableSelectionMode(i)">
         <ion-icon class="no-margin" item-start color="primary" *ngIf="selectionMode" [name]="checkSelection(i) ? 'checkbox' : 'square-outline'"></ion-icon>
-        {{account.data.getName()}}
+        {{archive.name}}
         <div item-end>
-          <div class="account-date">{{getDateFormat(account.data.getDate())}}</div>
-          <div class="account-total">{{account.data.getTotal().toFixed(2)}} {{settings.getCurrency()}}</div>
+          <div class="account-date">{{getDateFormat(archive.date)}}</div>
+          <div class="account-total">{{archive.total.toFixed(2)}} {{settings.getCurrency()}}</div>
         </div>
       </button>
 
 
-      <ion-item-options side="right" no-margin>
-        <button ion-button icon-only color="primary" class="slider-padding" (tap)="editAccount($event, account, sliding)">
+      <!-- <ion-item-options side="right" no-margin>
+        <button ion-button icon-only color="primary" class="slider-padding" (tap)="editAccount($event, archive, sliding)">
           <ion-icon name="create"></ion-icon>
         </button>
       </ion-item-options>
-
+ -->
     </ion-item-sliding>
   </ion-list>
 
 </ion-content>
 
-<ion-footer>
+<!-- <ion-footer>
   <button class="footer-button" ion-button full (click)="editAccount($event, null, null)">{{'HOME.NEW_ACCOUNT' | translate }}</button>
-</ion-footer>
+</ion-footer> -->

@@ -33,6 +33,12 @@ export class ItemList
 	getLength(): number { return this.items.length; }
 	getArray(): Array<Item> { return this.items; }
 
+	setList(list: ItemList)
+	{
+		this.items = list.items;
+		this.updateTotal();
+	}
+
 	getItem(index: number) : Item { return this.items[index]; }
 	setItem(index: number, item: Item) { this.items[index] = item; }
 

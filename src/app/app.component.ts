@@ -3,11 +3,12 @@ import { Nav, Platform, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { TranslateService } from '@ngx-translate/core';
-import { FileManager } from '../other/FileManager';
+import { FileService } from '../other/FileService';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 import { HomePage } from '../pages/home/home';
 import { SettingsPage } from '../pages/settings/settings';
+import { ArchivesPage } from '../pages/archives/archives';
 import { SettingsData } from '../other/SettingsData';
 
 @Component({
@@ -20,11 +21,13 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
+  private unregisterBackButtonAction:any = null;
+
   constructor(
     private translate: TranslateService,
     private permissions: AndroidPermissions,
     private alertCtrl: AlertController,
-    private file: FileManager,
+    private file: FileService,
     private settings: SettingsData,
     public platform: Platform, 
     public statusBar: StatusBar, 
@@ -39,6 +42,7 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: "MENU.HOME", component: HomePage },
+      { title: "MENU.ARCHIVES", component: ArchivesPage },
       { title: "MENU.SETTINGS", component: SettingsPage }
     ];
 
@@ -52,20 +56,12 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
+      this.unregisterBackButtonAction = this.platform.registerBackButtonAction(() => {
+        this.exitApp();
+      }, 101);
+
       this.checkPermissions()
-      .then((result) => { if (result == false) navigator['app'].exitApp(); });
-
-
-      this.file.setAppDirectory("BrocApp")
-      .then(() => {
-        return this.settings.loadSettings();
-      })
-      .catch((err) => {
-        console.error("[ERROR] " + err.message);
-      });
-
-
-      
+      .then((result) => { if (result == false) this.platform.exitApp(); });
     });
   }
 
@@ -124,5 +120,24 @@ export class MyApp {
 
       alert.present();
     });
+  }
+
+  exitApp()
+  {
+    let alertTitle: string = this.translate.instant("ALERT.TITLE.QUIT");
+    let alertContent: string = this.translate.instant('ALERT.CONTENT.QUIT');
+    let buttonYes: string = this.translate.instant("BUTTON.YES");
+    let buttonNo: string = this.translate.instant("BUTTON.NO");
+
+    let alert = this.alertCtrl.create({
+        title: alertTitle,
+        message: alertContent,
+        buttons: [ 
+          { text: buttonYes, handler: () => { this.platform.exitApp(); } },
+          { text: buttonNo, role:'cancel', handler: () => { console.log("Don't exit app.") } }
+        ]
+      });
+
+    alert.present();
   }
 }

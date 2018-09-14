@@ -2,11 +2,27 @@ page-home {
 	.slider-padding{
 		padding: 0 !important;
 	}
+	.no-margin{
+		margin: 0 !important;
+	}
+	.right-button {
+		padding-left: 8px !important;
+	}
+	.left-button {
+		padding-right: 8px !important;
+	}
 	.footer-button{
 		padding: 0;
 		margin: 0;
 		font-size: 2em;
 		height: 2.5em;
 		text-transform: none;
+	}
+	.account-date {
+		text-align: right !important;
+		color: map-get($colors, light) !important;
+	}
+	.account-total {
+		text-align: right !important;
 	}
 }

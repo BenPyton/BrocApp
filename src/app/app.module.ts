@@ -11,6 +11,8 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { SettingsPage } from '../pages/settings/settings';
 import { ListPage } from '../pages/list/list';
+import { ArchivesPage } from '../pages/archives/archives';
+import { ArchiveListPage } from '../pages/archiveList/archiveList';
 import { EditItemPage } from '../pages/EditItem/EditItem';
 import { EditAccountPage } from '../pages/EditAccount/EditAccount';
 import { SettingsData } from '../other/SettingsData';
@@ -32,7 +34,9 @@ export function createTranslateLoader(http: HttpClient) {
     ListPage,
     EditItemPage,
     EditAccountPage,
-    SettingsPage
+    SettingsPage,
+    ArchivesPage,
+    ArchiveListPage
   ],
   imports: [
     BrowserModule,
@@ -53,7 +57,9 @@ export function createTranslateLoader(http: HttpClient) {
     ListPage,
     EditItemPage,
     EditAccountPage,
-    SettingsPage
+    SettingsPage,
+    ArchivesPage,
+    ArchiveListPage
   ],
   providers: [
     StatusBar,

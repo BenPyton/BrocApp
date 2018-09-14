@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ModalController, AlertController, ItemSliding } from 'ionic-angular';
+import { NavController, Platform, NavParams, ModalController, AlertController, ItemSliding } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsData } from '../../other/SettingsData';
 import { EditItemPage } from '../EditItem/EditItem';
@@ -18,6 +18,14 @@ export class ListPage {
   totalGain: number = 0;
   private dirty:boolean = false;
 
+  private selectionMode:boolean = false;
+  private selection:Array<number> = [];
+
+  private unregisterBackButtonAction:any = null;
+
+  private pauseSubscribe: any = null;
+  private resumeSubscribe: any = null;
+
   constructor(
     private fileMngr: FileManager,
     private file: FileService,
@@ -26,42 +34,39 @@ export class ListPage {
     private settings: SettingsData,
     public navCtrl: NavController, 
     public navParams: NavParams, 
-    public modalCtrl: ModalController) 
+    public modalCtrl: ModalController,
+    public platform: Platform) 
   {
     // If we navigated to this page, we will have an item available as a nav param
     this.account = navParams.get('data');
     this.id = navParams.get('id');
     console.log("Id: " + this.id);
+
+    this.platform.ready()
+    .then(() => {
+      console.log("Subscribing to pause and resume...");
+      this.pauseSubscribe = this.platform.pause.subscribe(() => {
+        this.file.saveTmpAccount(this.account)
+        .catch(err => console.error("[ERROR] ", err));
+        console.log("PAUSE");
+      });
+
+      this.resumeSubscribe = this.platform.resume.subscribe(() => {
+        this.file.loadTmpAccount()
+        .then(list => { 
+          this.account = list; 
+        })
+        .catch(err => console.error("[ERROR] ", err));
+        console.log("RESUME");
+      });
+    });
   }
 
-
-  // saveFile()
-  // {
-  //   console.log("======== SAVING FILE ========");
-  //   this.fileMngr.getDirectory(this.fileMngr.getAppDirectory().nativeURL, "accounts")
-  //   .then((dir) =>
-  //   { 
-  //     console.log("Native url: " + dir.nativeURL);
-  //     let content = JSON.stringify(this.account);
-  //     return this.fileMngr.writeFile(dir, this.id + ".account", content);
-  //   })
-  //   .then(() => 
-  //   {
-  //     console.log("=========== END ============");
-  //   })
-  //   .catch(err => 
-  //   {
-  //     console.log("[ERROR] " + err.message);
-  //     let alert = this.alertCtrl.create({
-  //       title: "ERROR",
-  //       message: err.message,
-  //       buttons: ['Ok']
-  //     });
-  //     // Present the alert to the user
-  //     alert.present();
-  //   });
-  // }
-
+  ionViewWillLeave()
+  {
+    this.pauseSubscribe.unsubscribe();
+    this.resumeSubscribe.unsubscribe();
+  }
  
 
   // Work great but no file saving yet
@@ -103,7 +108,13 @@ export class ListPage {
               text: buttonNo,
               handler: () => {
                 console.log("Not saved.");
-                resolve();
+                this.file.loadAccountFromID(this.id)
+                .then((account) => {
+                  console.log("Account reloaded !");
+                  this.account.setList(account.data);
+                  resolve();
+                }).catch((err) => console.error(err));
+                
               }
             },
             { // Quit the page and save all changes
@@ -120,6 +131,91 @@ export class ListPage {
         alert.present()
       });
     }
+  }
+
+  enableSelectionMode(index: number)
+  {
+    if(this.selectionMode == false)
+    {
+      this.selectionMode = true;
+      this.toggleSelection(index);
+      this.unregisterBackButtonAction = this.platform.registerBackButtonAction(() => {
+        this.disableSelectionMode();
+      }, 110);
+    }
+  }
+
+  disableSelectionMode()
+  {
+    this.selectionMode = false;
+    this.selection = [];
+    if(this.unregisterBackButtonAction != null)
+      this.unregisterBackButtonAction();
+  }
+
+  checkSelection(index: number): boolean
+  {
+    return this.selection.indexOf(index) >= 0;
+  }
+
+  toggleSelection(index: number)
+  {
+    let k = this.selection.indexOf(index);
+    if(k >= 0)
+    {
+      this.selection.splice(k, 1);
+    }
+    else
+    {
+      this.selection.push(index);
+    }
+
+    console.log("Selection: ", this.selection);
+  }
+
+  deleteSelection()
+  {
+    new Promise((resolve, reject) => {
+      let alert = this.alertCtrl.create({
+        title: this.translate.instant('ALERT.TITLE.WARNING'),
+        message: this.translate.instant('ALERT.CONTENT.DELETE_ITEM'),
+        buttons: [
+              { // Do not delete the account
+                text: this.translate.instant('BUTTON.NO'),
+                handler: () => {
+                  resolve(false);
+                }
+              },
+              { // Confirm delete the account
+                text: this.translate.instant('BUTTON.YES'),
+                handler: () => {
+                  resolve(true);
+                }
+              }
+            ]
+      });
+      alert.present();
+    })
+    .then((confirm) => {
+      if(confirm)
+      {
+        console.log("Deleting selected items...");
+        // Sort indices descending to avoid deletion issues
+        this.selection.sort((a, b) => { return b-a; });
+
+        for(let i = 0; i < this.selection.length; i++)
+        {
+          this.deleteItem(null, (this.account.getArray())[this.selection[i]])
+        }
+
+        this.selection = [];
+      }
+      else
+      {
+        console.log("Items not deleted !");
+      }
+    })
+    .catch((err) => console.error("Error: " + err.message));
   }
 
   editItem(event, item: Item, sliding: ItemSliding)
@@ -158,47 +254,6 @@ export class ListPage {
     console.log("Delete item: " + item.getName());
     this.dirty = true;
     this.account.updateTotal();
-  }
-
-  testJSON()
-  {
-    let dirName = "BrocApp";
-    // let data = JSON.stringify(this.account);
-    // let account = ItemList.fromJSON(JSON.parse(data));
-    // console.log("Data : " + data);
-    // console.log("List name: " + account.getName());
-    // console.log("List length: " + account.getLength());
-    // console.log("Items 1: " + account.getArray()[0].toString());
-    // console.log("Items 1 name: " + account.getArray()[0].getName());
-    //this.saveFile();
-    this.fileMngr.getDirectory(this.fileMngr.getFileService().externalRootDirectory, dirName)
-    .then((dir) => {
-      // return this.fileMngr.listFiles(dir)
-      // .then((entries) => {
-      //   console.log("List files of directory: " + dirName);
-      //   for(let i = 0; i < entries.length; i++)
-      //   {
-      //     console.log("File: " + entries[i].name);
-      //   }
-      // });
-
-      //return this.fileMngr.getFileService().listDir(this.fileMngr.getFileService().externalRootDirectory, dirName);
-      // return new Promise<Entry[]>((resolve, reject) => {
-      //   let reader:DirectoryReader = dir.createReader();
-      //   reader.readEntries((entries) => resolve(entries), (err) => reject(err));
-      // });
-      return this.fileMngr.listFiles(dir);
-    })
-    .then((entries) => { 
-        for(let i = 0; i < entries.length; i++)
-        {
-          console.log("File: " + entries[i].name);
-        }
-      console.log("End.")
-    })
-    .catch((err) => {
-      console.log("Error: " + err.message);
-    });
   }
 
 }

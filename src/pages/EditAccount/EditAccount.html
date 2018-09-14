@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Edit Account
+      {{'ACCOUNT.HEADER' | translate}}
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -20,7 +20,19 @@
     </ion-item>
     <ion-item>
       <ion-label>{{'ACCOUNT.DATE' | translate}}</ion-label>
-      <ion-datetime displayFormat="DD DDD MMM YYYY" pickerFormat="DD MMM YYYY" [min]="getCurrentYear()-5" [max]="getCurrentYear()+5" formControlName="date"></ion-datetime>
+      <ion-datetime 
+        cancelText="{{'BUTTON.CANCEL' | translate}}"
+        doneText="{{'BUTTON.DONE' | translate}}"
+        monthNames="{{'DATE.MONTH.FULL' | translate}}"
+        monthShortNames="{{'DATE.MONTH.SHORT' | translate}}"
+        dayNames="{{'DATE.DAY.FULL' | translate}}"
+        dayShortNames="{{'DATE.DAY.SHORT' | translate}}"
+        displayFormat="DDD DD MMM YYYY" 
+        pickerFormat="DD MMM YYYY" 
+        [min]="getCurrentYear()-5" 
+        [max]="getCurrentYear()+5" 
+        formControlName="date">
+      </ion-datetime>
     </ion-item>
   </form>
 
