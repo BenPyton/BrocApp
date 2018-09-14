@@ -3,7 +3,8 @@
 		"MENU": "Menu",
 		"HOME": "Accueil",
 		"SETTINGS": "Paramètres",
-		"ARCHIVES": "Archives"
+		"ARCHIVES": "Archives",
+		"ABOUT": "À propos"
 	},
 	"HOME": {
 		"NO_ACCOUNT": "Il n'y a pas de compte.",
@@ -33,6 +34,9 @@
 		"CONFIRM_SAVE": "Confirmer la sauvegarde de compte",
 		"CURRENCY": "Devise",
 		"DEFAULT_CURRENCY": "€"
+	},
+	"ABOUT": {
+		"CONTENT": "BrocApp est une application permettant de gérer des feuilles de comptes lors de brocantes ou toutes autre manifestations."
 	},
 	"BUTTON": {
 		"APPLY": "Appliquer",

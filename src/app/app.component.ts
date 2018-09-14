@@ -8,6 +8,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 import { HomePage } from '../pages/home/home';
 import { SettingsPage } from '../pages/settings/settings';
+import { AboutPage } from '../pages/about/about';
 import { ArchivesPage } from '../pages/archives/archives';
 import { SettingsData } from '../other/SettingsData';
 
@@ -43,7 +44,8 @@ export class MyApp {
     this.pages = [
       { title: "MENU.HOME", component: HomePage },
       { title: "MENU.ARCHIVES", component: ArchivesPage },
-      { title: "MENU.SETTINGS", component: SettingsPage }
+      { title: "MENU.SETTINGS", component: SettingsPage },
+      { title: "MENU.ABOUT", component: AboutPage }
     ];
 
   }
@@ -132,9 +134,9 @@ export class MyApp {
     let alert = this.alertCtrl.create({
         title: alertTitle,
         message: alertContent,
-        buttons: [ 
-          { text: buttonYes, handler: () => { this.platform.exitApp(); } },
-          { text: buttonNo, role:'cancel', handler: () => { console.log("Don't exit app.") } }
+        buttons: [
+          { text: buttonNo, role:'cancel', handler: () => { console.log("Don't exit app.") } },
+          { text: buttonYes, handler: () => { this.platform.exitApp(); } }
         ]
       });
 

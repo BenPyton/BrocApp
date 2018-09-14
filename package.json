@@ -1,6 +1,6 @@
 {
   "name": "BrocApp",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "PytonSoft",
   "homepage": "",
   "private": true,
@@ -21,6 +21,7 @@
     "@angular/platform-browser": "5.2.11",
     "@angular/platform-browser-dynamic": "5.2.11",
     "@ionic-native/android-permissions": "^4.12.2",
+    "@ionic-native/app-version": "^4.12.2",
     "@ionic-native/core": "~4.11.0",
     "@ionic-native/file": "^4.12.2",
     "@ionic-native/ionic-webview": "^5.0.0-beta.11",
@@ -33,6 +34,7 @@
     "cordova-android": "7.0.0",
     "cordova-ios": "~4.3.1",
     "cordova-plugin-android-permissions": "^1.0.0",
+    "cordova-plugin-app-version": "^0.1.9",
     "ionic-angular": "3.9.2",
     "ionicons": "3.0.0",
     "moment": "^2.22.2",
@@ -51,7 +53,8 @@
       "ios"
     ],
     "plugins": {
-      "cordova-plugin-android-permissions": {}
+      "cordova-plugin-android-permissions": {},
+      "cordova-plugin-app-version": {}
     }
   }
 }

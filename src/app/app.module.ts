@@ -6,10 +6,12 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { File } from '@ionic-native/file';
 import { Keyboard } from '@ionic-native/keyboard';
+import { AppVersion } from '@ionic-native/app-version';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { SettingsPage } from '../pages/settings/settings';
+import { AboutPage } from '../pages/about/about';
 import { ListPage } from '../pages/list/list';
 import { ArchivesPage } from '../pages/archives/archives';
 import { ArchiveListPage } from '../pages/archiveList/archiveList';
@@ -36,7 +38,8 @@ export function createTranslateLoader(http: HttpClient) {
     EditAccountPage,
     SettingsPage,
     ArchivesPage,
-    ArchiveListPage
+    ArchiveListPage,
+    AboutPage
   ],
   imports: [
     BrowserModule,
@@ -59,7 +62,8 @@ export function createTranslateLoader(http: HttpClient) {
     EditAccountPage,
     SettingsPage,
     ArchivesPage,
-    ArchiveListPage
+    ArchiveListPage,
+    AboutPage
   ],
   providers: [
     StatusBar,
@@ -70,6 +74,7 @@ export function createTranslateLoader(http: HttpClient) {
     FileManager,
     FileService,
     AndroidPermissions,
+    AppVersion,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

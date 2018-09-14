@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{'MENU.ABOUT' | translate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  
+  <div style="height: 100% !important; display: flex; flex-flow: column; text-align: center;">
+    <h1 style="height: 30%; display: flex; align-items: flex-end;">
+      <span style="width: 100%;">{{appName}}</span>
+    </h1>
+    <p>
+      Version {{appVersion}}<br>2018 - PytonSoft
+    </p>
+    <p>
+      pytonsoft@gmail.com
+    </p>
+    <p style="flex: 1; text-align: justify; max-width: 70%; align-self: center;">
+      {{'ABOUT.CONTENT' | translate}}
+    </p>
+  </div>
+
+
+</ion-content>

@@ -3,7 +3,8 @@
 		"MENU": "Menu",
 		"HOME": "Home",
 		"SETTINGS": "Settings",
-		"ARCHIVES": "Archives"
+		"ARCHIVES": "Archives",
+		"ABOUT": "About"
 	},
 	"HOME": {
 		"NO_ACCOUNT": "There is no account.",
@@ -33,6 +34,9 @@
 		"CONFIRM_SAVE": "Confirm account save",
 		"CURRENCY": "Currency",
 		"DEFAULT_CURRENCY": "$"
+	},
+	"ABOUT": {
+		"CONTENT": "BrocApp is an application to manage account sheets during flea markets or any other event."
 	},
 	"BUTTON": {
 		"APPLY": "Apply",
