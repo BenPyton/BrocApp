@@ -42,7 +42,7 @@
         {{item.getName()}}
         <div float-right item-end margin-right>{{item.getPrice().toFixed(2)}} {{settings.getCurrency()}}</div>
       </button>
-      <ion-item-options side="right" no-margin>
+      <ion-item-options side="right" no-margin *ngIf="!selectionMode">
         <button ion-button icon-only color="primary" class="slider-padding" (tap)="editItem($event, item, sliding)">
           <ion-icon name="create"></ion-icon>
         </button>

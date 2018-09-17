@@ -45,10 +45,17 @@ export class HomePage {
 		// 	});
 		// });
 		
-		this.fileService.loadAllAcounts().then(accounts => { 
+		console.log("waiting for permissions...");
+		this.fileService.waitForPermission()
+		.then(() => {
+			console.log("Loading accounts...");
+			return this.fileService.loadAllAcounts();
+		})
+		.then(accounts => { 
 			this.accountList = accounts; 
 			this.loadingAccounts = false; 
-		});
+		})
+		.catch((err) => console.error("[ERROR] ", err));
 	}
 
 	editAccount(event, account: Account, itemSliding: ItemSliding)
@@ -162,6 +169,7 @@ export class HomePage {
 				}
 
 				this.selection = [];
+				this.disableSelectionMode();
 			}
 			else
 			{
@@ -209,6 +217,7 @@ export class HomePage {
 				}
 
 				this.selection = [];
+				this.disableSelectionMode();
 			}
 			else
 			{

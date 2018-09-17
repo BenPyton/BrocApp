@@ -15,6 +15,8 @@ import { FileService } from '../../other/FileService';
 export class ArchiveListPage {
   account: ItemList;
 
+  private unregisterBackPage:any = null;
+
   constructor(
     private fileMngr: FileManager,
     private file: FileService,
@@ -28,6 +30,17 @@ export class ArchiveListPage {
   {
     // If we navigated to this page, we will have an item available as a nav param
     this.account = navParams.get('data');
+
+
+    this.unregisterBackPage = this.platform.registerBackButtonAction(() => {
+      this.navCtrl.pop();
+    }, 105);
+  }
+
+  ionViewWillLeave()
+  {
+    if(this.unregisterBackPage != null) 
+      this.unregisterBackPage();
   }
 }
 

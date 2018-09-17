@@ -120,6 +120,7 @@ export class ArchivesPage {
 				}
 
 				this.selection = [];
+				this.disableSelectionMode();
 			}
 			else
 			{

@@ -35,6 +35,7 @@ export class FileService {
 	readonly configFile: string = "settings.cfg";
 	private isAndroid: boolean = false;
 	private isReady: boolean = false;
+	private hasPermission: boolean = false;
 
 	constructor(
 		private file: FileManager, 
@@ -64,6 +65,24 @@ export class FileService {
 
 		});
 
+	}
+
+	waitForPermission(): Promise<any> {
+		return new Promise((resolve, reject) => {
+			let wait = () =>
+			{
+				if(this.isReady && !this.isAndroid) return reject(new Error("Platform is not android."));
+				if(this.hasPermission) return resolve();
+				console.log("Polling for storage permissions...")
+				setTimeout(wait, 100); // Relaunch function after 100ms
+			}
+			wait();
+		});
+	}
+
+	setHasPermission(hasIt: boolean)
+	{
+		this.hasPermission = hasIt;
 	}
 
 
@@ -212,13 +231,16 @@ export class FileService {
 	{
 		let accountList = new Array<Account>();
 		return new Promise((resolve, reject) => {
+			console.log("Waiting for app directory loading...");
 			this.isAppDirectoryLoaded()
 			.then(() => {
+				console.log("Getting account directory...");
 				this.file.getDirectory(this.appDirectory.nativeURL, this.accountDirectory)
 				.then((dir) => {
 					return this.file.listFiles(dir);
 				})
 				.then((entries) => {
+					if(entries.length == 0) return resolve(accountList);
 					console.log("There is " + entries.length + " files in this directory:");
 					let complete:number = 0;
 					for(let i = 0; i < entries.length; i++)

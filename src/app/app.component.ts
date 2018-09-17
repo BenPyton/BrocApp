@@ -23,6 +23,7 @@ export class MyApp {
   pages: Array<{title: string, component: any}>;
 
   private unregisterBackButtonAction:any = null;
+  private unregisterCancelAppQuit:any = null;
 
   constructor(
     private translate: TranslateService,
@@ -63,7 +64,10 @@ export class MyApp {
       }, 101);
 
       this.checkPermissions()
-      .then((result) => { if (result == false) this.platform.exitApp(); });
+      .then((result) => { 
+        if (result == false) this.platform.exitApp(); 
+        else this.file.setHasPermission(true);
+      });
     });
   }
 
@@ -131,6 +135,8 @@ export class MyApp {
     let buttonYes: string = this.translate.instant("BUTTON.YES");
     let buttonNo: string = this.translate.instant("BUTTON.NO");
 
+
+
     let alert = this.alertCtrl.create({
         title: alertTitle,
         message: alertContent,
@@ -141,5 +147,11 @@ export class MyApp {
       });
 
     alert.present();
+
+
+    this.unregisterCancelAppQuit = this.platform.registerBackButtonAction(() => {
+      alert.dismiss();
+      this.unregisterCancelAppQuit();
+    }, 200);
   }
 }

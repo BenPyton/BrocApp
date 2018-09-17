@@ -22,6 +22,7 @@ export class ListPage {
   private selection:Array<number> = [];
 
   private unregisterBackButtonAction:any = null;
+  private unregisterBackPage:any = null;
 
   private pauseSubscribe: any = null;
   private resumeSubscribe: any = null;
@@ -37,10 +38,15 @@ export class ListPage {
     public modalCtrl: ModalController,
     public platform: Platform) 
   {
+    console.log("List Page constructor");
     // If we navigated to this page, we will have an item available as a nav param
     this.account = navParams.get('data');
     this.id = navParams.get('id');
     console.log("Id: " + this.id);
+
+    this.unregisterBackPage = this.platform.registerBackButtonAction(() => {
+      this.navCtrl.pop();
+    }, 105);
 
     this.platform.ready()
     .then(() => {
@@ -54,7 +60,7 @@ export class ListPage {
       this.resumeSubscribe = this.platform.resume.subscribe(() => {
         this.file.loadTmpAccount()
         .then(list => { 
-          this.account = list; 
+          this.account.setList(list); 
         })
         .catch(err => console.error("[ERROR] ", err));
         console.log("RESUME");
@@ -62,16 +68,26 @@ export class ListPage {
     });
   }
 
+  ionViewDidLoad()
+  {
+    console.log("List Page View Loaded");
+  }
+
   ionViewWillLeave()
   {
+    console.log("Unsubscribe pause and resume");
     this.pauseSubscribe.unsubscribe();
     this.resumeSubscribe.unsubscribe();
+    this.disableSelectionMode();
+    if(this.unregisterBackPage != null) 
+      this.unregisterBackPage();
   }
  
 
   // Work great but no file saving yet
   ionViewCanLeave()
   {
+    console.log("Dirty? " + this.dirty);
     if(this.dirty) // Whether to display confirm message or not
     {
       return new Promise((resolve, reject) => {
@@ -80,6 +96,7 @@ export class ListPage {
         if(!this.settings.getConfirmSave())
         {
           console.log("Auto Save");
+          console.log("Data length: " + this.account.getLength());
           this.file.saveAccount({data: this.account, id: this.id});
           return resolve();
         }
@@ -209,6 +226,7 @@ export class ListPage {
         }
 
         this.selection = [];
+        this.disableSelectionMode();
       }
       else
       {

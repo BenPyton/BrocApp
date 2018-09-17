@@ -3,7 +3,7 @@ Signed the APK android for releasing in Google Play :
 DISCLAIMER: only me have the key password so whoever is not me can't sign the apk, this is just a remember for me and noone else.
 
 #1 Create the release apk :
-	ionic cordova build android --release
+	ionic cordova build android --prod --release
 
 #2 Move apk :
   from: ./platforms/android/app/build/outputs/apk/release
