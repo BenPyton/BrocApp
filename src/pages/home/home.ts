@@ -23,6 +23,8 @@ export class HomePage {
 
 	private loadingAccounts: boolean = false;
 
+	private focused: boolean = false;
+
 	constructor(
 		private modalCtrl: ModalController,
 		private translate: TranslateService,
@@ -91,9 +93,21 @@ export class HomePage {
 	    modal.present();
 	}
 
+	ionViewDidEnter()
+	{
+		console.log("Home view Entered");
+		this.focused = true;
+	}
+
+	ionViewWillLeave()
+	{
+		console.log("Home view will leave");
+		this.focused = false;
+	}
+
 	enableSelectionMode(index: number)
 	{
-		if(this.selectionMode == false)
+		if(this.focused && this.selectionMode == false)
 		{
 			this.selectionMode = true;
 			this.toggleSelection(index);
@@ -227,46 +241,14 @@ export class HomePage {
     	.catch((err) => console.error("Error: " + err.message));
 	}
 
-	// deleteAccount(event, account: Account, itemSliding: ItemSliding)
-	// {
-	// 	if(itemSliding != null) itemSliding.close();
-	// 	new Promise((resolve, reject) => {
-	// 		let alert = this.alertCtrl.create({
-	// 			title: this.translate.instant('ALERT.TITLE.WARNING'),
-	// 			message: this.translate.instant('ALERT.CONTENT.DELETE_ACCOUNT'),
-	// 			buttons: [
-	//             { // Do not delete the account
-	//               text: this.translate.instant('BUTTON.NO'),
-	//               handler: () => {
-	//                 reject();
-	//               }
-	//             },
-	//             { // Confirm delete the account
-	//               text: this.translate.instant('BUTTON.YES'),
-	//               handler: () => {
-	//                 resolve();
-	//               }
-	//             }
-	//           ]
-	// 		});
-	// 		alert.present();
-	// 	})
-	// 	.then(() => {
-	// 		console.log("Account \"" + account.data.getName() + "\" deleted");
-	// 		this.fileService.deleteAccount(account);
-	// 		this.accountList.splice(this.accountList.indexOf(account), 1);
-	// 	})
-	// 	.catch(() => { 
-	// 		console.log("Account \"" + account.data.getName() + "\" kept");
-	// 	});
-	// }
-
 	openAccount(event, account: Account)
 	{
+		console.log("Tapped account");
 		if(!this.selectionMode)
 		{
 			this.navCtrl.push(ListPage, account);
 		}
+		console.log("Page pushed !");
 	}
 
 

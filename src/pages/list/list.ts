@@ -39,9 +39,8 @@ export class ListPage {
     public platform: Platform) 
   {
     console.log("List Page constructor");
-    // If we navigated to this page, we will have an item available as a nav param
-    this.account = navParams.get('data');
-    this.id = navParams.get('id');
+    this.account = this.navParams.get('data');
+    this.id = this.navParams.get('id');
     console.log("Id: " + this.id);
 
     this.unregisterBackPage = this.platform.registerBackButtonAction(() => {
@@ -66,11 +65,6 @@ export class ListPage {
         console.log("RESUME");
       });
     });
-  }
-
-  ionViewDidLoad()
-  {
-    console.log("List Page View Loaded");
   }
 
   ionViewWillLeave()
