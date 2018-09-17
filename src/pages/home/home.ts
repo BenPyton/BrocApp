@@ -247,6 +247,7 @@ export class HomePage {
 		if(!this.selectionMode)
 		{
 			this.navCtrl.push(ListPage, account);
+			this.focused = false;
 		}
 		console.log("Page pushed !");
 	}

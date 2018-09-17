@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Keyboard } from '@ionic-native/keyboard';
-import { NavParams, ModalController, ViewController } from 'ionic-angular';
+import { NavParams, ModalController, ViewController, Platform } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 import { Item } from '../../other/ItemModel';
 
@@ -11,6 +11,7 @@ import { Item } from '../../other/ItemModel';
 export class EditItemPage {
 
   private group: FormGroup;
+  private unregisterBackPage = null;
   @ViewChild('itemName') itemNameInput;
 
   constructor(
@@ -18,7 +19,8 @@ export class EditItemPage {
     private formBuilder: FormBuilder,
     public navParams: NavParams, 
     public modalCtrl: ModalController, 
-    public viewCtrl: ViewController) 
+    public viewCtrl: ViewController,
+    public platform: Platform) 
   {
     let data = navParams.get('data');
     if(data == null)
@@ -31,6 +33,16 @@ export class EditItemPage {
       description: [data.getDescription()],
       price: [data.getPrice().toFixed(2), Validators.compose([Validators.required, Validators.pattern(/-?[0123456789]+((,|\.)[0123456789]*)?/)])]
     });
+
+    this.unregisterBackPage = this.platform.registerBackButtonAction(() => {
+      this.dismiss(null);
+    }, 108);
+  }
+
+  ionViewWillLeave()
+  {
+    if(this.unregisterBackPage != null)
+      this.unregisterBackPage();
   }
 
   ionViewDidLoad()

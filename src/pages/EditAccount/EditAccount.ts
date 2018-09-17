@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Keyboard } from '@ionic-native/keyboard';
-import { NavParams, ModalController, ViewController } from 'ionic-angular';
+import { NavParams, ModalController, ViewController, Platform } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 import { ItemList } from '../../other/ItemList';
 
@@ -11,6 +11,7 @@ import { ItemList } from '../../other/ItemList';
 export class EditAccountPage {
 
   private group: FormGroup;
+  private unregisterBackPage = null;
   @ViewChild('accountName') accountNameInput;
 
   constructor(
@@ -18,7 +19,8 @@ export class EditAccountPage {
     private formBuilder: FormBuilder,
     public navParams: NavParams, 
     public modalCtrl: ModalController, 
-    public viewCtrl: ViewController) 
+    public viewCtrl: ViewController,
+    public platform: Platform) 
   {
     let data = navParams.get('data');
     if(data == null)
@@ -31,6 +33,16 @@ export class EditAccountPage {
       description: [data.getDescription()],
       date: [data.getDate().toJSON()]
     });
+
+    this.unregisterBackPage = this.platform.registerBackButtonAction(() => {
+      this.dismiss(null);
+    }, 108);
+  }
+
+  ionViewWillLeave()
+  {
+    if(this.unregisterBackPage != null)
+      this.unregisterBackPage();
   }
 
   ionViewDidLoad()
